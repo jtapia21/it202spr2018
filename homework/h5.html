@@ -14,8 +14,9 @@
     
     <body>
         <!-- -->
+        <div class="container">
         <div class="jumbotron">
-          <h1> Jesse Tapia - Homework 5 </h1>
+          <h1 class = "display-4"> Jesse Tapia - Homework 5 </h1>
           <p class="lead" >This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information. </p>
           <hr class="my-4"> <!-- line seperation-->
           <p> It uses utility classes for typography and spacing to space content out within the larger container. </p>
@@ -24,13 +25,11 @@
           <p class="lead">
               <a class="btn btn-primary" href="#" role="button"> Learn more </a> </p>
         </div> <!-- End of jumbotron class -->
-        
-        <div class="container">
           
           <div class="row">
              
             <!--/////////////// Column 1 ///////////////////////////////////-->
-            <div class="col-sm-3">
+            <div class="col-sm-4">
                 <!-- How to create cards with images --> 
                 <div class="card">
                     <img class="card-img-top" src="https://www.w3schools.com/bootstrap4/img_avatar1.png" alt="Card image" style="width:100%">
@@ -43,7 +42,7 @@
             </div> <!-- End of column class 1-->
             
             <!--/////////////// Column 2 ///////////////////////////////////-->
-            <div class="col-sm-3">
+            <div class="col-sm-4">
                 <!-- How to create cards with images --> 
                 <div class="card">
                     <img class="card-img-top" src="https://www.w3schools.com/bootstrap4/img_avatar2.png" alt="Card image" style="width:100%">
@@ -56,7 +55,7 @@
             </div> <!-- End of column class 2-->
             
             <!--/////////////// Column 3 ///////////////////////////////////-->
-            <div class="col-sm-3">
+            <div class="col-sm-4">
                 <!-- How to create cards with images --> 
                 <div class="card">
                     <img class="card-img-top" src="https://www.w3schools.com/bootstrap4/img_avatar3.png" alt="Card image" style="width:100%">
@@ -70,7 +69,50 @@
             
           </div> <!-- End of row class-->
           
-        </div> <!-- End dof class container-->
         
+        
+        <!--///////////////// Start the strip table /////////////////////////--> 
+        <table class="table table-striped">
+            <thead> <!-- The top titles for the table-->
+                <tr>
+                    <th> Questions# </th>
+                    <th> Answers </th>
+                </tr>
+            </thead> <!-- End of thread table -->
+            
+            <tbody> <!-- The body of the table -->
+            
+                <tr> <!-- New row 1-->
+                    <td> 1.</td>
+                    <td> Download Bootstrap from getbootstrap.com or include Bootstrap from a CDN. </td>
+                </tr> <!-- End of question 1 -->
+                
+                <tr> <!-- New row 2 -->
+                    <td> 2.</td>
+                    <td> Content delivery networks (CDN) are the transparent backbone of the Internet in charge of content delivery. </td>
+                </tr> <!-- End of question 2 -->
+                
+                <tr> <!-- new row 3 -->
+                    <td> 3.</td>
+                    <td> To minimize the distance between the visitors and your website's server. </td>
+                </tr> <!-- End of question 3 -->
+                
+                <tr> <!-- new row 4-->
+                    <td> 4.</td>
+                    <td> Breakpoints are the point a which your sites content will respond to provide the user with the best possible layout to consume the information. </td>
+                </tr> <!-- End of question 4-->
+                
+                <tr> <!-- new row 5-->
+                    <td> 5.</td>
+                    <td> bootstrap uses 576px, 768px, 992px, 1200px. </td>
+                </tr> <!-- End of question 5-->
+                
+                <tr> <!-- new row 6-->
+                    <td> 6. </td>
+                    <td> </td>
+                </tr> <!-- End of question 6-->
+                
+            </tbody> <!-- End of tbody -->
+        </div> <!-- End dof class container-->
     </body>
 </html>
