@@ -4,17 +4,16 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
   </head>
   <body>
     
     <div class = "container" id = "home"></div>
     
-    <div class = "container" id = "search">search
+    <div class = "container" id = "search">
         <input type = "text" id = "query" placeholder = "Enter search here."> 
         <button id = "btnSearch">Search</button> 
     </div>
-    
-    
     <div class = "container" id = "results"></div> 
     
     <!-- jQuery first, then Tether, then Bootstrap JS. -->
@@ -65,7 +64,7 @@
           }).done(function(response) {
         
             //console.log(result); 
-            $("results").append("<p>Your search for <strong>" + $("#querry").val() + "</strong> returned" + response.num_results + "</p>" );
+            $("results").append("<p>Your search for <strong>" + $("#query").val() + "</strong> returned" + response.num_results + "</p>" );
             
             $.each(response.results, function(i,v) {
               $("#results").append(v.display_title, + "opens on" + v.opening_date + "<br>");
@@ -78,7 +77,8 @@
           });
         }
         
-        $("#btnSearch").on("click", doSearch);
+        $("#btnSearch").on("click", doSearch); 
+        
      </script>
 
     
