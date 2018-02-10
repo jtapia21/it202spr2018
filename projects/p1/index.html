@@ -50,7 +50,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style = "background-color: #001E62">
       <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">Start Bootstrap</a>
+        <a class="navbar-brand js-scroll-trigger" href="#page-top"> Apple </a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           Menu
           <i class="fa fa-bars"></i>
@@ -104,7 +104,9 @@
     
     <!-- replace masthead with carousal -->
     <!--carousal-->
-    <div class="container"> 
+    <header class="masthead text-white text-center">
+    <!--<div class="overlay"></div>-->
+    <div class="container">
       <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
         <ol class="carousel-indicators">
@@ -117,21 +119,21 @@
         <!-- first image slide -->
         <div class="carousel-inner" role = "listbox">
           <div class="item active">
-            <img src="1900x1080.png" alt="Demo" >
-            <h3>Demo Slide 1</h3>
+            <img src="iPad.jpg" alt="Demo" width="1900" height="1080">
+            <h3>iPad flat-out fun</h3>
           </div>
           
           <!-- Second slide -->
           <div class="item">
-            <img src="1900x1080.png" alt="Demo2" >
-            <h3>Demo Slide 2</h3>
+            <img src="macbookpro.jpg" alt="Demo2" >
+            <h3>Macbook Pro is Speed-of-the-art</h3>
           </div>
           
           <!-- Third slide -->
           <div class="item">
-            <img src="1900x1080.png" alt="Demo3" >
-            <h3>Demo Slide 3</h3>
-          </div>
+            <img src="xiPhone.png" alt="Demo3">
+            <h3>The new iPhone X</h3>
+          </div> 
           
         <!-- Left and right controls -->
         <a class="left carousel-control" href="#myCarousel" data-slide="prev">
@@ -144,6 +146,7 @@
         </a>
       </div>
     </div> 
+    </header>
 
     <!-- Icons Grid -->
     <section class="features-icons bg-light text-center">
@@ -227,14 +230,14 @@
           </div>
         </div>
         <div class="row no-gutters">
-          <div class="col-lg-6 text-white showcase-img" style="background-image: url('img/bg-showcase-2.jpg');"></div>
+          <div class="col-lg-6 text-white showcase-img" style="background-image: url('airPods.png')"></div>
           <div class="col-lg-6 my-auto showcase-text">
             <h2>Updated For Bootstrap 4</h2>
             <p class="lead mb-0">Newly improved, and full of great utility classes, Bootstrap 4 is leading the way in mobile responsive web development! All of the themes on Start Bootstrap are now using Bootstrap 4!</p>
           </div>
         </div>
         <div class="row no-gutters">
-          <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('img/bg-showcase-3.jpg');"></div>
+          <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('swift.jpg');"></div>
           <div class="col-lg-6 order-lg-1 my-auto showcase-text">
             <h2>Easy to Use &amp; Customize</h2>
             <p class="lead mb-0">Landing Page is just HTML and CSS with a splash of SCSS for users who demand some deeper customization options. Out of the box, just add your content and images, and your new landing page will be ready to go!</p>
@@ -340,7 +343,7 @@
 <div id="googleMap" style="height:400px;width:100%;"></div>
 <script>
 function myMap() {
-var myCenter = new google.maps.LatLng(41.878114, -87.629798);
+var myCenter = new google.maps.LatLng(41.8895007, -87.6228522);
 var mapProp = {center:myCenter, zoom:12, scrollwheel:false, draggable:false, mapTypeId:google.maps.MapTypeId.ROADMAP};
 var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
 var marker = new google.maps.Marker({position:myCenter});
