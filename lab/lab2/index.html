@@ -51,23 +51,35 @@
     </script> -->
      <script>
         function doSearch() {
-          // Built by LucyBot. www.lucybot.com
+            // Built by LucyBot. www.lucybot.com
           var url = "https://api.nytimes.com/svc/movies/v2/reviews/search.json";
           url += '?' + $.param({
-          'api-key': "e6051bae49124b5cadb9eca56df4912c",
-          'query': "star wars"
-      });
+            'api-key': "e6051bae49124b5cadb9eca56df4912c",
+            'query': $("#query").val()
+          });
       
       
-      $.ajax({
-        url: url,
-        method: 'GET',
-      }).done(function(result) {
-        console.log(result);
-      }).fail(function(err) {
-        throw err;
-      });
+          $.ajax({
+            url: url,
+            method: 'GET',
+          
+          }).done(function(response) {
+        
+            //console.log(result); 
+            $("results").append("<p>Your search for <strong>" + $("#querry").val() + "</strong> returned" + response.num_results + "</p>" );
+            
+            $.each(response.results, function(i,v) {
+              $("#results").append(v.display_title, + "opens on" + v.opening_date + "<br>");
+            });
+        
+          }).fail(function(err) {
+        
+            throw err;
+        
+          });
         }
+        
+        $("#btnSearch").on("click", doSearch);
      </script>
 
     
