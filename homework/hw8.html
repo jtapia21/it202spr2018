@@ -11,7 +11,7 @@
     <div class = "container" id = "home"></div>
     
     <div class = "container" id = "search">
-        <input type = "text" id = "query" placeholder = "Zip Code." pattern = "[0-9]{5}"> 
+        <input type = "text" id = "query" placeholder = "Enter zip code"> 
         <button id = "btnSearch">Search</button> 
     </div>
     <div class = "container" id = "results"></div> 
@@ -22,6 +22,70 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
     
+    <!-- 
+    <script>
+        
+       
+      // Built by LucyBot. www.lucybot.com
+      var url = "https://api.nytimes.com/svc/movies/v2/reviews/search.json";
+          url += '?' + $.param({
+          'api-key': "e6051bae49124b5cadb9eca56df4912c",
+          'query': "star wars"
+      });
+      
+      
+      $.ajax({
+        url: url,
+        method: 'GET',
+      }).done(function(result) {
+        console.log(result);
+      }).fail(function(err) {
+        throw err;
+      });
+      
+      
+    </script> -->
+    
+    
+     <script>
+     
+        function doSearch() {
+            
+          var url = "https://query.yahooapis.com/v1/public/yql?q=select%20item.condition%20from%20weather.forecast%20where%20woeid%20%3D%202487889&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys/";
+
+          
+          url += '?' + $.param({
+            'api-key': "dj0yJmk9YlFmTG00NjNmdEJmJmQ9WVdrOWNVeE1ibEF5TkhVbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD1mOQ--86727958693425ee71ccbf706d7ad9fe2c2402d7",
+            'query': $("#query").val()
+          });
+      
+      
+          $.ajax({
+            url: url,
+            method: 'GET',
+          
+          }).done(function(response) {
+        
+            //console.log(result); 
+            $("results").append("<p>Your search for <strong>" + $("#query").val() + "</strong> returned" + response.num_results + "</p>" );
+            
+            $.each(response.results, function(i,v) {
+              //$("#results").append(v.display_title, + "opens on" + v.opening_date + "<br>");
+              $("#results").append("The temperature in " + location + " is " + temp + ". Forecast looks" + text);
+            });
+        
+          }).fail(function(err) {
+        
+            throw err;
+            //$("#results")
+        
+          });
+        }
+        
+        $("#btnSearch").on("click", doSearch); 
+        
+     </script>
     
   </body>
 </html>
+
