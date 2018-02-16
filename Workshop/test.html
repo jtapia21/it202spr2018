@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>repl.it</title>
+
+  </head>
+  <body>
+    <h2>Weather Search</h2>
+    <p>Enter a zip code in the box, then click the button.</p>
+    
+    <input value="60645" type="text" id="zip" placeholder="Enter a U.S. zip code">
+    <button id="btnGetWeather">Get Weather!</button>
+    <div id="results"></div>
+
+    
+    <script
+    src="http://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>  
+    
+    <script>
+    
+      var url = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22<zip goes here>%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"
+    
+      
+      $("#btnGetWeather").on("click", function() {
+        $.get (
+          url.replace("<zip goes here>", $("#zip").val())
+          )
+          .done(function(response) {
+            console.log(response);
+            $("#results").text("");
+            
+            $("#results").append("<h1>" + response.query.results.channel.title + "</h1>");
+            $.each(response.query.results.channel.item.forecast, function(i,v) {
+                $("#results").append("<br>" + v.date + ": " + v.text);
+            })
+          })     
+      });
+    
+    </script>
+
+  </body>
+</html>
