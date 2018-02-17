@@ -7,7 +7,7 @@
     <!--<script src="https://code.jquery.com/jquery-1.10.2.js"></script>-->
     
     <style>
-      #home, #search, #results {
+      #home, #search, #results #template {
         display: none;
       }
     
@@ -30,15 +30,16 @@
     </div>
     <div class = "container" id = "results"></div> 
     
-    
-    <div class="card" id = "template">
-    <div class="card-header">
-      Featured
-    </div>
-      <div class="card-body">
-        <h5 class="card-title">Special title treatment</h5>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+    <div class = "container">
+      <div id = "template" class="card">
+      <div class="card-header">
+        Featured
+      </div>
+        <div class="card-body">
+          <h5 class="card-title">Special title treatment</h5>
+          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+          <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
+        </div>
       </div>
     </div>
     
@@ -114,12 +115,31 @@
           }).done(function(response) {
         
             //console.log(result); 
-            $("results").append("<p>Your search for <strong>" + $("#query").val() + "</strong> returned" + response.num_results + "</p>" );
+            //$("results").append("<p>Your search for <strong>" + $("#query").val() + "</strong> returned" + response.num_results + "</p>" );
             
-            $.each(response.results, function(i,v) {
-              
-              
+            //$.each(response.results, function(i,v) {
               //$("#results").append(v.display_title, + "opens on" + v.opening_date + "<br>");
+              
+            $.each(function.results, function(i,v)) {
+               console.log(result); 
+               $("#results").text("");
+                        
+                // clone template
+                var clone = $("#template").clone();
+                        
+                clone.find(".card-body h5").text(v.display_title);
+                clone.attr("id", "card" + i);
+                        
+                //clone.find(".card-body h6").text("Opens on " + v.opening_date);
+                //clone.attr("id", "card" + i);
+                        
+                clone.find(".card-body p").text(v.summary_short);
+                clone.attr("id", "card" + i);
+                        
+                        
+                // find/replace anchor text
+            
+                $("#results").append(clone);
               
             });
         
