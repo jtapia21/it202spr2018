@@ -5,44 +5,86 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <!--<script src="https://code.jquery.com/jquery-1.10.2.js"></script>-->
-    
+    <title> Lab 2 </title>
     <style>
-      #home, #search, #results #template {
+      #home, #search, #results, #template {
         display: none;
       }
+      
+      .button {
+          background-color: #4CAF50; /* Green */
+          border: none;
+          color: white;
+          padding: 16px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 4px 2px;
+          -webkit-transition-duration: 0.4s; /* Safari */
+          transition-duration: 0.4s;
+          cursor: pointer;
+      }
+      
+      #start {
+          background-color: white; 
+          color: black; 
+          border: 2px solid #4CAF50;
+      }
+      
+      #start:hover {
+          background-color: #4CAF50;
+          color: white;
+      }
+      
+      #btnSearch {
+          background-color: white; 
+          color: black; 
+          border: 2px solid #4CAF50;
+      }
+      
+      #btnSearch:hover {
+          background-color: #4CAF50;
+          color: white;
+      }
+      
+      #btnBack {
+          background-color: white;
+          color: black;
+          border: 2px solid #e7e7e7;
+      }
+      
+      #btnBack:hover {background-color: #e7e7e7;}
     
     </style>
   </head>
+  
   <body>
     
-    <!--<div class = "container" id = "Get Started">
-      
-    </div>-->
-    
-    
-    <div class = "container" id = "home">
-      <button id = "start" onClick = "switchNew('home')" >Get Started</button>
+    <h1 align = "center">Welcome to movie review app!</h1>
+    <div class = "container" id = "home" align = "center">
+      <button id = "start" onClick = "switchTo('home')" >Get Started</button>
     </div>
     
-    <div class = "container" id = "search">
+    <div class = "container" id = "search" align = "center">
         <input type = "text" id = "query" placeholder = "Enter search here."> 
-        <button id = "btnSearch" onClick = "switchNew('search')">Search</button> 
+        <button id = "btnSearch" onClick = "switchTo('search')">Search</button> 
     </div>
     <div class = "container" id = "results"></div> 
     
     <div class = "container">
       <div id = "template" class="card">
-      <div class="card-header">
-        Featured
-      </div>
+        <div class="card-header">
+          Featured
+        </div>
         <div class="card-body">
           <h5 class="card-title">Special title treatment</h5>
           <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
+          <button id = "btnBack" onClick = "switchTo('backTo')">New Search</button>
         </div>
       </div>
     </div>
-    
+
 
     
     <!-- Optional JavaScript -->
@@ -83,15 +125,19 @@
         
         });
         
-      function switchNew(id) {
+      function switchTo(id) {
         var newSearch = id;
         if(newSearch == "home") {
           document.getElementById("home").style.display = "none";
           document.getElementById("search").style.display = "block";
         }
-        else {
+        else if (newSearch == "search") {
           document.getElementById("search").style.display = "none";
           document.getElementById("results").style.display = 'block';
+        }
+        else {
+          document.getElementById("backTo").style.display = "none";
+          document.getElementById("search").style.display = "block";
         }
       }
     </script>
@@ -120,24 +166,22 @@
             //$.each(response.results, function(i,v) {
               //$("#results").append(v.display_title, + "opens on" + v.opening_date + "<br>");
               
-            $.each(function.results, function(i,v)) {
-               console.log(result); 
+            $.each(response.results, function(i,v) {
+               //console.log(result); 
+               
                $("#results").text("");
                         
                 // clone template
                 var clone = $("#template").clone();
                         
-                clone.find(".card-body h5").text(v.display_title);
+                clone.find(".card-header").text(v.display_title);
                 clone.attr("id", "card" + i);
                         
-                //clone.find(".card-body h6").text("Opens on " + v.opening_date);
-                //clone.attr("id", "card" + i);
+                clone.find(".card-body h5").text("Opens on " + v.opening_date);
+                clone.attr("id", "card" + i);
                         
                 clone.find(".card-body p").text(v.summary_short);
                 clone.attr("id", "card" + i);
-                        
-                        
-                // find/replace anchor text
             
                 $("#results").append(clone);
               
