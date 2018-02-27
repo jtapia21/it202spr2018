@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Project 2</title>
+        
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <!--<script src="https://code.jquery.com/jquery-1.10.2.js"></script>-->
+        
+        <style>
+        
+          #home, #search, #results {
+            display: none;
+          }
+          
+          body {
+              background-color: powderblue;
+          }
+          
+          #home {
+              background-color: MediumTurquoise;
+          }
+        
+        </style>
+        
+    </head>
+    <body>
+        
+        <!--Home screen-->        
+        <div class = "container" id = "home">
+            <h1>Welcome!</h1>
+            <h3>Getting started by selecting a shool type that is right for you and your child.</h3>
+            <button type="button" class="btn btn-primary" id = "start" onClick = "switchNew('home')" >Get Started</button>
+        </div>
+        
+        <!--Search screen-->
+        <div class = "container" id = "search">
+                <h3>Please type your school type of choice in the search box to see where are they located in Chicago.</h3>
+                <input type = "text" id = "query" placeholder = "Enter search here."> 
+                <button type="button" id = "btnSearch">Search</button> 
+                
+                <!--Checkboxes-->
+                <hr>
+                
+                <h4>or select multiple types here.</h4>
+                <input type = "checkbox" name = "schoolType" value = "Career academy"> Career academy <br>
+                <input type = "checkbox" name = "schoolType" value = "Charter"> Charter <br>
+                <input type = "checkbox" name = "schoolType" value = "Citywide-Option"> Citywide-Option <br>
+                <input type = "checkbox" name = "schoolType" value = "Classical"> Classical <br>
+                <input type = "checkbox" name = "schoolType" value + "Contract"> Contract <br>
+                <input type = "checkbox" name = "schoolType" value + "Magnet"> Magnet <br>
+                <input type = "checkbox" name = "schoolType" value + "Military academy"> Military academy <br>
+                <input type = "checkbox" name = "schoolType" value + "Neighborhood"> Neighborhood <br>
+                <input type = "checkbox" name = "schoolType" value + "Regional gifted center"> Regional gifted center <br>
+                <input type = "checkbox" name = "schoolType" value + "Selective enrollment"> Selective enrollment <br>
+                <input type = "checkbox" name = "schoolType" value + "Small"> Small <br>
+                <input type = "checkbox" name = "schoolType" value + "Special Education"> Special Education
+                
+                <hr>
+        </div>
+        
+        <div class = "container" id = "results"></div> 
+        
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        
+        <!--Script for switching screens-->
+        <script>
+          $(document).ready(function(){
+            document.getElementById("home").style.display = "block" ;
+            
+            });
+            
+          function switchNew(id) {
+            var newSearch = id;
+            if(newSearch == "home") {
+              document.getElementById("home").style.display = "none";
+              document.getElementById("search").style.display = "block";
+            }
+            else {
+              document.getElementById("search").style.display = "none";
+              document.getElementById("results").style.display = 'block';
+            }
+          }
+        </script>
+        
+    </body>
+</html>
