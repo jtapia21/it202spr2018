@@ -4,23 +4,41 @@
         <title>Project 2</title>
         
         <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-        <!--<script src="https://code.jquery.com/jquery-1.10.2.js"></script>-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         
         <style>
-        
+          
+          .screen {
+            display:none;
+            min-height:300px;
+            color:white; 
+            padding:15px;
+            
+          }
+          
           #home, #search, #results {
             display: none;
           }
           
+          #map {
+            height: 400px;
+            width: 100%;
+          }
+          
           body {
-              background-color: powderblue;
+            background-color: powderblue;
           }
           
           #home {
-              background-color: MediumTurquoise;
+            background-color: orange;
+            text-align: center;
           }
-        
+          
+          #search {
+            background-color: dodgerblue;
+            text-align: center;
+          }
         </style>
         
     </head>
@@ -30,33 +48,31 @@
         <div class = "container" id = "home">
             <h1>Welcome!</h1>
             <h3>Getting started by selecting a shool type that is right for you and your child.</h3>
-            <button type="button" class="btn btn-primary" id = "start" onClick = "switchNew('home')" >Get Started</button>
+            <button type="button" class="btn btn-primary centerMe" id = "start" onClick = "switchNew('home')" >Get Started</button>
         </div>
         
         <!--Search screen-->
         <div class = "container" id = "search">
-                <h3>Please type your school type of choice in the search box to see where are they located in Chicago.</h3>
-                <input type = "text" id = "query" placeholder = "Enter search here."> 
+                <h3>Please select the type of school you want for you and your children.</h3>
+                <h5>Note: Hold down the Ctrl (windows) / Command (Mac) button to select multiple options.</h5>
+                
+                <!--Selected multiple-->
+                <select name="schoolType" multiple>
+                  
+                  <option value = "Career academy"> Career academy </option>
+                  <option value = "Charter"> Charter </option>
+                  <option value = "Citywide-Option"> Citywide-Option </option>
+                  <option value = "Classical"> Classical </option>
+                  <option value = "Contract"> Contract </option>
+                  <option value = "Magnet"> Magnet </option>
+                  <option value = "Military academy"> Military academy </option>
+                  <option value = "Neighborhood"> Neighborhood </option>
+                  <option value = "Regional gifted center"> Regional gifted center </option>
+                  <option value = "Selective enrollment"> Selective enrollment </option>
+                  <option value = "Small"> Small <br>
+                  <option value = "Special Education"> Special Education </option>
+                </select>
                 <button type="button" id = "btnSearch">Search</button> 
-                
-                <!--Checkboxes-->
-                <hr>
-                
-                <h4>or select multiple types here.</h4>
-                <input type = "checkbox" name = "schoolType" value = "Career academy"> Career academy <br>
-                <input type = "checkbox" name = "schoolType" value = "Charter"> Charter <br>
-                <input type = "checkbox" name = "schoolType" value = "Citywide-Option"> Citywide-Option <br>
-                <input type = "checkbox" name = "schoolType" value = "Classical"> Classical <br>
-                <input type = "checkbox" name = "schoolType" value + "Contract"> Contract <br>
-                <input type = "checkbox" name = "schoolType" value + "Magnet"> Magnet <br>
-                <input type = "checkbox" name = "schoolType" value + "Military academy"> Military academy <br>
-                <input type = "checkbox" name = "schoolType" value + "Neighborhood"> Neighborhood <br>
-                <input type = "checkbox" name = "schoolType" value + "Regional gifted center"> Regional gifted center <br>
-                <input type = "checkbox" name = "schoolType" value + "Selective enrollment"> Selective enrollment <br>
-                <input type = "checkbox" name = "schoolType" value + "Small"> Small <br>
-                <input type = "checkbox" name = "schoolType" value + "Special Education"> Special Education
-                
-                <hr>
         </div>
         
         <div class = "container" id = "results"></div> 
@@ -84,7 +100,60 @@
               document.getElementById("results").style.display = 'block';
             }
           }
+          
+          var url = "https://data.cityofchicago.org/resource/76dk-7ieb.json?$where=school_type IN ('<school type goes here>')";
+          
+            function initMap() {
+                
+                //when button is clicked
+                $("#btnSearch").on("click", function() {
+                    $.get(
+                        //gets value entered in search box and adds it to var url
+                        url.replace("<school type goes here>", $("#schoolType").val())
+                    )
+                    .done(function(response) {
+                        
+                        var myLatLng = {lat: 41.8781, lng: -87.6298};
+                        var map = new google.maps.Map(document.getElementById('map'), {
+                            zoom: 10,
+                            center: myLatLng,
+                        });
+                      
+                        console.log(response);
+                        $("#results").text("");
+                    
+                    
+                        $.each(response, function(i,v) {
+                            console.log(v);
+                            var contentString = "hello";
+                            //$("#results").append("<br>" + v.long_name + "<br>" + " Grades offered: " + v.grades_offered + "<br>");
+
+                            
+                            var infowindow = new google.maps.InfoWindow({
+                                content: contentString
+                            });
+                            
+                            var marker = new google.maps.Marker({
+                                    
+                              position: {lat:parseFloat( response[i].school_latitude), lng: parseFloat(response[i].school_longitude)},
+                              map: map
+                                    
+                            });
+                            
+                            
+                            marker.addListener('click', function() {
+                                infowindow.open(map, marker);
+                            });
+                        });
+                    });
+                });
+            }
+          
         </script>
         
+        <!--google api-->
+        <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU&callback=initMap">
+        </script>
     </body>
 </html>
