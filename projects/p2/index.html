@@ -1,159 +1,109 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Project 2</title>
-        
-        <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <title>Project 2</title>
         
         <style>
-          
-          .screen {
-            display:none;
-            min-height:300px;
-            color:white; 
-            padding:15px;
+            .screen {
+              display: none;
+              min-height: 300px;
+              color: white;
+              padding: 15px;
+            }
             
-          }
-          
-          #home, #search, #results {
-            display: none;
-          }
-          
-          #map {
-            height: 400px;
-            width: 100%;
-          }
-          
-          body {
-            background-color: powderblue;
-          }
-          
-          #home {
-            background-color: orange;
-            text-align: center;
-          }
-          
-          #search {
-            background-color: dodgerblue;
-            text-align: center;
-          }
+           #home {
+              background-color: LawnGreen;
+            }
+            
+            #search {
+              background-color: Green;
+            }
+            
+            #mResults {
+              background-color: DarkGreen;
+            }
+            
+            nav {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background-color: #333;
+            }
+            
+            li {
+                float: left;
+            }
+            
+            li a {
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+            
+            li a:hover:not(.active) {
+                background-color: #111;
+            }
+            
+            .active {
+                background-color: #4CAF50;
+            }
+ 
         </style>
-        
     </head>
     <body>
-        
-        <!--Home screen-->        
-        <div class = "container" id = "home">
-            <h1>Welcome!</h1>
-            <h3>Getting started by selecting a shool type that is right for you and your child.</h3>
-            <button type="button" class="btn btn-primary centerMe" id = "start" onClick = "switchNew('home')" >Get Started</button>
+      <nav>
+        <li><a class="active" href="#home">Home</a></li>
+        <li><a href="#search">Search</a></li>
+        <li><a href="#mResults">Map</a></li>
+        <li><a href="#about">About</a></li>
+      </nav>
+
+        <!--creates the home screen-->
+        <div id="home" class="screen">
+            <p id="centerMe">Search by school type and get both a 
+            list of the schools and a map of the schools.
+            </p>
         </div>
         
-        <!--Search screen-->
-        <div class = "container" id = "search">
-                <h3>Please select the type of school you want for you and your children.</h3>
-                <h5>Note: Hold down the Ctrl (windows) / Command (Mac) button to select multiple options.</h5>
-                
-                <!--Selected multiple-->
-                <select name="schoolType" multiple>
-                  
-                  <option value = "Career academy"> Career academy </option>
-                  <option value = "Charter"> Charter </option>
-                  <option value = "Citywide-Option"> Citywide-Option </option>
-                  <option value = "Classical"> Classical </option>
-                  <option value = "Contract"> Contract </option>
-                  <option value = "Magnet"> Magnet </option>
-                  <option value = "Military academy"> Military academy </option>
-                  <option value = "Neighborhood"> Neighborhood </option>
-                  <option value = "Regional gifted center"> Regional gifted center </option>
-                  <option value = "Selective enrollment"> Selective enrollment </option>
-                  <option value = "Small"> Small <br>
-                  <option value = "Special Education"> Special Education </option>
+        <div id="search" class="row form-group form-inline screen">
+                <select id ="schoolType" class="form-control" placeholder="Shool Type" name="School Type" multiple>
+                    <option value="'Career academy'">Career academy</option>
+                    <option value="'Military academy'">Military academy</option>
+                    <option value="'Regional gifted center'">Regional gifted center</option>
+                    <option value="'Special Education'">Special Education</option>
                 </select>
-                <button type="button" id = "btnSearch">Search</button> 
+                <input id="btnSearch" class="btn btn-primary" type="submit">
+                <div id="results"></div>
         </div>
         
-        <div class = "container" id = "results"></div> 
+        <div id="mResults" class="screen">
+            <div id="map"></div>
+        </div>
         
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-        
-        <!--Script for switching screens-->
+
         <script>
-          $(document).ready(function(){
-            document.getElementById("home").style.display = "block" ;
+            // show the home screen
+            $("#home").show();
             
+            // when a nav link is clicked, hide screens then show target
+            $("nav a").on("click", function() {
+            	$(".screen").hide();
+                var targetSelector = $(this).attr("href");
+                console.log(targetSelector);
+                $(targetSelector).show();
             });
             
-          function switchNew(id) {
-            var newSearch = id;
-            if(newSearch == "home") {
-              document.getElementById("home").style.display = "none";
-              document.getElementById("search").style.display = "block";
-            }
-            else {
-              document.getElementById("search").style.display = "none";
-              document.getElementById("results").style.display = 'block';
-            }
-          }
-          
-          var url = "https://data.cityofchicago.org/resource/76dk-7ieb.json?$where=school_type IN ('<school type goes here>')";
-          
-            function initMap() {
-                
-                //when button is clicked
-                $("#btnSearch").on("click", function() {
-                    $.get(
-                        //gets value entered in search box and adds it to var url
-                        url.replace("<school type goes here>", $("#schoolType").val())
-                    )
-                    .done(function(response) {
-                        
-                        var myLatLng = {lat: 41.8781, lng: -87.6298};
-                        var map = new google.maps.Map(document.getElementById('map'), {
-                            zoom: 10,
-                            center: myLatLng,
-                        });
-                      
-                        console.log(response);
-                        $("#results").text("");
-                    
-                    
-                        $.each(response, function(i,v) {
-                            console.log(v);
-                            var contentString = "hello";
-                            //$("#results").append("<br>" + v.long_name + "<br>" + " Grades offered: " + v.grades_offered + "<br>");
-
-                            
-                            var infowindow = new google.maps.InfoWindow({
-                                content: contentString
-                            });
-                            
-                            var marker = new google.maps.Marker({
-                                    
-                              position: {lat:parseFloat( response[i].school_latitude), lng: parseFloat(response[i].school_longitude)},
-                              map: map
-                                    
-                            });
-                            
-                            
-                            marker.addListener('click', function() {
-                                infowindow.open(map, marker);
-                            });
-                        });
-                    });
-                });
-            }
-          
-        </script>
-        
-        <!--google api-->
-        <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU&callback=initMap">
+            
         </script>
     </body>
 </html>

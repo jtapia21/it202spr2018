@@ -43,11 +43,6 @@
         .picture {
             display: none;
         }
-          #centerMe {
-               margin: auto;
-               text-align: center;
-                width: 30%;
-            }
         </style>
         
     </head>
@@ -69,22 +64,32 @@
         <div class = "screen" id = "hScreen">
             <h1>Welcome!</h1>
             <h3>Getting started by selecting a shool type that is right for you and your child.</h3>
-            <!--<button type="button" class="btn btn-primary centerMe" id = "start">Get Started</button>-->
+            <button type="button" class="btn btn-primary centerMe" id = "start">Get Started</button>
         </div>
         
         <!--Search screen-->
-        <div id="sScreeen" class="row form-group form-inline screen">
-            <h2 id="centerMe">Search</h2>
-            <div id="centerMe">
-                <select id ="schoolType" class="form-control" placeholder="Shool Type" name="School Type" multiple>
-                    <option value="'Career academy'">Career academy</option>
-                    <option value="'Military academy'">Military academy</option>
-                    <option value="'Regional gifted center'">Regional gifted center</option>
-                    <option value="'Special Education'">Special Education</option>
+        <div class = "row form-group form-inline screen" id = "sScreen">
+                <h3>Please select the type of school you want for you and your children.</h3>
+                <h5>Note: Hold down the Ctrl (windows) / Command (Mac) button to select multiple options.</h5>
+                
+                <!--Selected multiple-->
+                <select id = "schoolType" class = "form-control" name = "School Type" multiple>
+                  
+                  <option value = "Career academy"> Career academy </option>
+                  <option value = "Charter"> Charter </option>
+                  <option value = "Citywide-Option"> Citywide-Option </option>
+                  <option value = "Classical"> Classical </option>
+                  <option value = "Contract"> Contract </option>
+                  <option value = "Magnet"> Magnet </option>
+                  <option value = "Military academy"> Military academy </option>
+                  <option value = "Neighborhood"> Neighborhood </option>
+                  <option value = "Regional gifted center"> Regional gifted center </option>
+                  <option value = "Selective enrollment"> Selective enrollment </option>
+                  <option value = "Small"> Small <br>
+                  <option value = "Special Education"> Special Education </option>
                 </select>
-                <input id="btnSearch" class="btn btn-primary" type="submit">
-                <div id="results"></div>
-            </div>
+                <input id = "btnSearch" class = "btn btn-primary" type = "submit">
+                <div id = "results"></div>
         </div>
         
         <!--<div class = "container" id = "results"></div> -->
@@ -101,8 +106,6 @@
         
         <!--Script for switching screens-->
         <script>
-            
-            
             // show the home screen
             $("#hScreen").show();
             
@@ -132,8 +135,7 @@
                             zoom: 10,
                             center: myLatLng,
                         });
-                        
-                        //display responses on console
+                      
                         console.log(response);
                         $("#results").text("");
                     
@@ -193,6 +195,7 @@
             }
         </script>
         
+        <!--google api-->
         <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAx9rxfpIjJEQ75l2CeLbtWA68HNPSr8YY&callback=initMap">
         </script>
