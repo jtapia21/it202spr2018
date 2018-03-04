@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang = "en">
+<html>
     <head>
     <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -9,21 +9,29 @@
         <style>
             .screen {
               display: none;
-              min-height: 900px;
+              min-height: 999px;
               color: white;
               padding: 15px;
             }
             
            #home {
+              display: none;
               background-color: LawnGreen;
             }
             
             #search {
+              display: none;
               background-color: Green;
             }
             
             #mResults {
+              display: none;
               background-color: DarkGreen;
+            }
+            
+            #about {
+              display: none;
+              background-color: MediumBlue;
             }
             
             #map {
@@ -65,6 +73,9 @@
             h2 {
               color: black;
             }
+            h3 {
+              color: black;
+            }
         </style>
     </head>
     <body>
@@ -78,14 +89,17 @@
       </nav>
 
         <!--home screen-->
-        <div id="home" class="screen">
-            <h2 id="centerMe">Search by school type and get both a 
-            list of the schools and a map of the schools.
-            </h2>
+        <div id="home" class="screen" style="text-align:center">
+            <h1>Welcome!</h1>
+            <h3>Getting started by selecting a shool type that is right for you and your child.</h3>
+            <button id = "start" class = "btn btn-primary" onClick = "switchTo('home')" >Get Started</button>
         </div>
         
         <!--search screen-->
-        <div id="search" class="row form-group form-inline screen">
+        <div id = "search" class = "form-group form-inline screen" style="text-align:center">
+          <h3>Please select the type of school you want for you and your children.</h3>
+          <h5>Note: Hold down the Ctrl (windows) / Command (Mac) button to select multiple options.</h5>
+          <!--Drop down menu-->
           <select id ="schoolType" class="form-control" placeholder="Shool Type" name="School Type" multiple>
                   <option value = "'Career academy'"> Career academy </option>
                   <option value = "'Charter'"> Charter </option>
@@ -100,21 +114,53 @@
                   <option value = "'Small'"> Small </option>
                   <option value = "'Special Education'"> Special Education </option>
           </select>
-          <input id="btnSearch" class="btn btn-primary" type="submit">
-          <div id="results"></div>
+          <input id = "btnSearch" class = "btn btn-primary" type = "submit" onClick = "switchTo('search')"> <br>
+          <span style = "color: blue;">Submit </span><span>button will take you to the google map and give you the information of the school.</span><br>
+          <div id = "sResults"></div>
         </div>
         
         <!--map screen-->
-        <div id="mResults" class="screen">
+        <div id="mResults" class="screen" style="text-align:center">
           <h1>Map</h1>
+          <h3>Map locations for each school</h3>
           <div id="map"></div>
+          <div id = "results"></div>
+        </div>
+        
+        <!--about page-->
+        <div id = "about" class = "screen" style = "text-align: center">
+          <h1>Project 2</h1>
+          <h2>School Locator</h2>
+          <h4 style = "color: black;">By: Jesse Tapia, jtapia21, IT202, Spring 2018</h4>
         </div>
         
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-
+        
+        <!--Script for switching the pages with each button-->
+        <!--might be a better way but this is how I did it in the lab-->
+        <script>
+          $(document).ready(function(){
+            document.getElementById("home").style.display = "block" ;
+            
+            });
+            
+          function switchTo(id) {
+            var newSearch = id;
+            if(newSearch == "home") {
+              document.getElementById("home").style.display = "none";
+              document.getElementById("search").style.display = "block";
+            }
+            else if (newSearch == "search") {
+              document.getElementById("search").style.display = "none";
+              document.getElementById("mResults").style.display = 'block';
+            }
+          }
+        </script>
+        
+        
         <script>
             // show the home screen
             $("#home").show();
@@ -143,7 +189,7 @@
                     )
                     .done(function(response) {
                         
-                        //centers map on chicago
+                        //centers map on chicago & creates it
                         var myLatLng = {lat: 41.8781, lng: -87.6298};
                         var map = new google.maps.Map(document.getElementById('map'), {
                             zoom: 10,
@@ -158,10 +204,14 @@
                         $.each(response, function(i,v) {
                             //console.log(v);
                             
+                            $("#sResults").append("<br>" + v.long_name + "<br>"  + v.school_type + "<br>" + v.address +  " " + v.location_state 
+                                                        + " " + v.location_zip + "<br>" + "Phone number: " + v.phone + "<br>" );
+                            
                             //Show results
                             $("#results").append("<br>" + v.long_name + "<br>"  + v.school_type + "<br>" + v.address +  " " + v.location_state 
                                                         + " " + v.location_zip + "<br>" + "Phone number: " + v.phone + "<br>" );
                             
+                            //adds text when the marker is highlighted
                             var contentString = '<div id = "content" style = "color:Black;">'+
                                                 '<div id = "siteNotice">'+
                                                 '</div>'+
@@ -177,65 +227,65 @@
                             //creates an info window
                             var infowindow = new google.maps.InfoWindow({
                                 content: contentString
-                            });
+                            });                       
                             
-                            //assigns different markers
+                            //assigns different markers to the string position
                             if(v.school_type == "Career academy") {
                               labelIndex = 0;
-                            }
+                            }//End of if statement of A
                             
                             if(v.school_type == "Charter") {
                               labelIndex = 1;
-                            }
+                            }//End of if statement of B
                             
                             if(v.school_type == "Citywide-Option") {
                               labelIndex = 2;
-                            }
+                            }//End of if statement of C
                             
                             if(v.school_type == "Classical") {
                               labelIndex = 3;
-                            }
+                            }//End of if statement of D
                             
                             if(v.school_type == "Contract") {
                               labelIndex = 4;
-                            }
+                            }//End of if statement of E
                             
                             if(v.school_type == "Magnet") {
                               labelIndex = 5;
-                            }
+                            }//End of if statement of F
                             
                             if(v.school_type == "Military academy") {
                               labelIndex = 6;
-                            }
+                            }//End of if statement of G
                             
                             if(v.school_type == "Neighborhood") {
                               labelIndex = 7;
-                            }
+                            }//End of if statement of H
                             
                             if(v.school_type == "Regional gifted center") {
                               labelIndex = 8;
-                            }
+                            }//End of if statement of I
                             
                             if(v.school_type == "Selective enrollment") {
                               labelIndex = 9;
-                            }
+                            }//End of if statement of G
                             
                             if(v.school_type == "Small") {
                               labelIndex = 10;
-                            }
+                            }//End of if statement of K
                             
                             if(v.school_type == "Special Education") {
                               labelIndex = 11;
-                            }
+                            }//End of if statement of L
                             
-                            //Creates marker 
+                            //Creates marker with the letter of string to it in the map
                             var marker = new google.maps.Marker({
                               position: {lat:parseFloat( response[i].school_latitude), lng: parseFloat(response[i].school_longitude)},
                               map: map,
-                              label: labels[labelIndex]
+                              label: labels[labelIndex] 
                             });
                             
-                            //opens info window on click
+                            //opens info window on click with the created map
                             marker.addListener('click', function() {
                             infowindow.open(map, marker);
                             });
