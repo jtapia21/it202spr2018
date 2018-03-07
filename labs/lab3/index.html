@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>repl.it</title>
+   
+  </head>
+  <body>
+    <canvas id="myCanvas" width="900" height="900"></canvas>
+    <img id="pac" src="pacman.png">
+    <img id="enem" src="ghost.png">
+    <img id="health" src="hea.png">
+    
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        
+        
+    <script>
+      var c=document.getElementById("myCanvas");
+      var ctx=c.getContext("2d");
+      
+      var game = {lives: 3, score: 0, state: "play"};
+      var player = {x: 75, y:110,  radius: 50};     
+      var harm = {x: c.width, y:100, radius: 50};
+      var benf = {x: c.width, y:600, radius: 50};
+      
+      function draw() {
+        ctx.clearRect(0,0,c.width,c.height);
+        
+        //adds color to background
+        ctx.fillStyle = "Blue";
+        ctx.fillRect(0,0,c.width, c.height);
+        
+        //display game score and lives 
+        ctx.font = "12px Arial";
+        ctx.fillStyle = "white";
+        ctx.fillText("Lives: " + game.lives + " " + "Score: " + game.score, 10, 50);
+        
+        // draw harm
+        harm.x--;
+        
+        if (harm.x <= 0) {
+          harm.x = c.width;
+          harm.y = Math.floor(Math.random() * c.width);
+        }
+        
+        // ctx.fillStyle = harm.color;
+        // ctx.beginPath();
+        // ctx.arc(harm.x,harm.y,harm.radius,0,2*Math.PI);
+        // ctx.fill();
+        
+        //draw image
+        ctx.beginPath();
+        ctx.drawImage(document.getElementById('enem'), harm.x, harm.y);
+        
+        // collision check, using code from 
+        //   https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+        
+        var dx = player.x - harm.x;
+        var dy = player.y - harm.y;
+        var distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < player.radius + harm.radius) {
+            // collision detected!
+            console.log("collision");
+            
+            harm.x = c.width;   // reposition harm 
+            game.lives--;       // reduce lives
+
+            // TODO: handle game over condition
+            if (game.lives == 0){
+              game.state = "over";
+              ctx.clearRect(0,0,c.width,c.height);
+              ctx.fillStyle = "red";
+              ctx.fillRect(0,0,c.width,c.height);
+              ctx.font = "30px Arial";
+              ctx.fillText("Game Over", 10, 50);
+            }
+            
+            
+            console.log(game);
+        }
+        
+        
+        // TODO:  draw benefit
+        benf.x--;
+        
+        if (benf.x <= 0) {
+          benf.x = c.width;
+          benf.y = Math.floor(Math.random() * c.width);
+        }
+        
+        // ctx.fillStyle = benf.color;
+        // ctx.beginPath();
+        // ctx.arc(benf.x,benf.y,benf.radius,0,2*Math.PI);
+        // ctx.fill();
+        
+        //draw image
+        ctx.beginPath();
+        ctx.drawImage(document.getElementById('health'), benf.x, benf.y);
+        
+        
+        var dx = player.x - benf.x;
+        var dy = player.y - benf.y;
+        var distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < player.radius + benf.radius) {
+            // collision detected!
+            console.log("collision");
+            
+            benf.x = c.width;   // reposition harm 
+            game.score++;       // reduce lives
+            
+            // TODO: handle game over condition
+            
+            
+            console.log(game);
+        }
+        
+        
+        
+        
+        // draw player
+        // ctx.fillStyle = player.color;
+        // ctx.beginPath();
+        // ctx.arc(player.x,player.y,player.radius,0,2*Math.PI);
+        // ctx.fill();
+        
+        ctx.beginPath();
+        ctx.drawImage(document.getElementById('pac'), player.x, player.y);
+        
+        
+        // TODO:  draw score and lives
+        if(game.state == "play") {
+          requestAnimationFrame(draw);
+        }
+         
+        //Game over screen
+        if (game.lives == 0) {
+          game.state = "over";
+          ctx.clearRect(0,0,c.width, c.height);
+          ctx.fillStyle = "red";
+          ctx.fillRect(0,0,c.width,c.height);
+          ctx.font = "12px Arial";
+          ctx.fillStyle = "white";
+          ctx.fillText("Game Over", 250, 300);
+        }
+        
+      }
+      
+      
+      
+      
+      draw();
+
+      // TODO:  keyboard events to change player y coordinate
+            
+      $(document).keydown(function(e) {
+          switch(e.which) {
+              case 37: // left
+              break;
+      
+              case 38: // up
+              player.y -= 10;
+              break;
+      
+              case 39: // right
+              break;
+      
+              case 40: // down
+              player.y += 10;
+              break;
+      
+              default: return; // exit this handler for other keys
+          }
+          e.preventDefault(); // prevent the default action (scroll / move caret)
+      });
+      
+      
+      // TODO:  space bar to pause game
+
+
+
+
+    </script>
+  </body>
+</html>
