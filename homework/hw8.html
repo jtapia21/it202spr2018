@@ -1,88 +1,66 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
   <head>
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <title>Weather app</title>
+    
   </head>
+  
   <body>
-    
-    <div class = "container" id = "home"></div>
-    
-    <div class = "container" id = "search">
-        <input type = "text" id = "query" placeholder = "Enter zip code"> 
-        <button id = "btnSearch">Search</button> 
+      
+    <div class="jumbotron">
+        <h2 class="text-center" style="font-size:50px" > Weather App </h2>
     </div>
-    <div class = "container" id = "results"></div> 
     
-    <!-- jQuery first, then Tether, then Bootstrap JS. -->
-    <!--<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>-->
-    <script src="http://code.jquery.com/jquery-3.3.1.slim.js" integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA=" crossorigin="anonymous"></script>
+    
+    <div class="text-primary">
+        <h3 class="text-center">Enter a zip code to find out the temperature of that location</h3>
+    </div>
+    
+    <div class="container" >
+        <div class="row form-group form-inline" id="centerMe">
+            <div id="search">
+                <input type="text" name="zipCode" id="zipCode" class="form-control" placeholder="Enter Zip Code...">
+                <button id="btnSearch" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+        
+        <div class="container" id="results">
+        
+        </div>
+    
+    </div>
+    
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
     
-    <!-- 
     <script>
-        
-       
-      // Built by LucyBot. www.lucybot.com
-      var url = "https://api.nytimes.com/svc/movies/v2/reviews/search.json";
-          url += '?' + $.param({
-          'api-key': "e6051bae49124b5cadb9eca56df4912c",
-          'query': "star wars"
-      });
-      
-      
-      $.ajax({
-        url: url,
-        method: 'GET',
-      }).done(function(result) {
-        console.log(result);
-      }).fail(function(err) {
-        throw err;
-      });
-      
-      
-    </script> -->
+        var url = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22<zip goes here>%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
     
+        $("#btnSearch").on("click", function() {
+          $.get (
+            url.replace("<zip goes here>", $("#zipCode").val())
+            )
+            .done(function(response) {
+              console.log(response);
+              $("#results").text("");
+              
+              $("#results").append("<h1>" + response.query.results.channel.title + "</h1>");
+              $.each(response.query.results.channel.item.forecast, function(i,v) {
+                  $("#results").append("<br>" + v.date + ": " + v.text);
+              });
+            }); 
+        });
+    </script>
     
-     <script>
-     
-        function doSearch() {
-          // Built by LucyBot. www.lucybot.com
-          var url = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22nome%2C%20ak%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
-          
-          url += '?' + $.param({
-            'api-key': "",
-            'query': $("#query").val()
-          });
-      
-      
-          $.ajax({
-            url: url,
-            method: 'GET',
-          
-          }).done(function(response) {
         
-            //console.log(result); 
-            $("results").append("<p>Your search for <strong>" + $("#query").val() + "</strong> returned" + response.num_results + "</p>" );
-            
-            $.each(response.results, function(i,v) {
-              $("#results").append(v.display_title, + "opens on" + v.opening_date + "<br>");
-            });
-        
-          }).fail(function(err) {
-        
-            throw err;
-        
-          });
-        }
-        
-        $("#btnSearch").on("click", doSearch); 
-        
-     </script>
-    
   </body>
 </html>
-
