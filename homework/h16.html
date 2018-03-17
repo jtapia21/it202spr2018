@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>homework working with dexie</title>
+        <!-- Include Dexie -->
+        <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+        
+        <script>
+        
+          // Define your database
+        var db = new Dexie("AppDB");
+          db.version(1).stores({
+          Restaurants: "++id,name,cuisine"
+        });
+        for (var i = 1; i < 107; i++) {
+            db.Restaurants.bulkDelete([i]);
+        }
+        
+        db.Restaurants.add({name: "GoldenThai", cuisine: "Thai"});
+        db.Restaurants.add({name: "Paisans", cuisine: "Italian"});
+        db.Restaurants.add({name: "FudRuckers", cuisine: "American"});
+        //db.Restaurants.bulkDelete([1,2,3,4,5,6]);
+        
+        
+        
+        db.Restaurants.where("cuisine").noneOf("Thai").each(function(i) {
+            console.log("Found: " + JSON.stringify(i));
+        }); /*.then(function(rest){
+            console.log("Found: " + JSON.stringify(rest));
+        });*/
+        </script>
+    </head>
+    <body>
+        
+    </body>
+</html>
