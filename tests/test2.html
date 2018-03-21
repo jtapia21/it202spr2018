@@ -19,6 +19,7 @@
             console.log(response);
             $.each(response, function(i,v) {
               data.addRow([v.department, parseFloat(v.sum_annual_salary)]);
+              $("#results").text("");
             })
           })
             
