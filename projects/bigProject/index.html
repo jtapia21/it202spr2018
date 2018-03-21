@@ -1,9 +1,179 @@
 <!DOCTYPE html>
 <html>
     <head>
+    <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <title>Big Project</title>
+        
+        <style>
+            .screen {
+              display: none;
+              min-height: 999px;
+              color: white;
+              padding: 15px;
+            }
+            
+           #home {
+              display: none;
+              
+            }
+            
+            #second {
+              display: none;
+              
+            }
+            
+            #third {
+              display: none;
+              
+            }
+            
+            #about {
+              display: none;
+              
+            }
+            
+            #map {
+              height: 500px;
+            }
+            
+            nav {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background-color: #333;
+            }
+            
+            li {
+                float: left;
+            }
+            
+            li a {
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+            
+            li a:hover:not(.active) {
+                background-color: #111;
+            }
+            
+            .active {
+                background-color: Gray;
+            }
+            
+            h1 {
+              color: black;
+            }
+            
+            h2 {
+              color: black;
+            }
+            h3 {
+              color: black;
+            }
+        </style>
     </head>
     <body>
+        <!--navigation bar-->
+        <nav>
+            <li><a class="active" href="#home">Home</a></li>
+            <li><a href="#second">Restaurant</a></li>
+            <li><a href="#third">Crime</a></li>
+        </nav>
 
+        <!--home screen-->
+        <div id="home" class="screen" style="text-align:center">
+            <h1>Welcome!</h1>
+            <h3>Search for your restaurant</h3>
+            <input type = "text" placeholder = "Restaurant">
+            <button id = "btnSearch" class = "btn btn-primary" type = "submit" onClick = "switchTo('home')" >Get Started</button>
+        </div>
+
+        <!--search screen-->
+        <div id = "second" class = "form-group form-inline screen" style="text-align:center">
+            <!--some code for second screen --> 
+             <h1>Map</h1>
+             <h3></h3>
+             <div id="map"></div>
+             <div id = "results"></div>
+        </div>
+        
+        <!--map screen-->
+        <div id="third" class="screen" style="text-align:center">
+          <!--<h1>Map</h1>
+          <h3></h3>
+          <div id="map"></div>
+          <div id = "results"></div>-->
+        </div>
+        
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        
+        <!--Script to switch screens-->
+        <script>
+          $(document).ready(function(){
+            document.getElementById("home").style.display = "block" ;
+            
+            });
+            
+          function switchTo(id) {
+            var newSearch = id;
+            if(newSearch == "home") {
+              document.getElementById("home").style.display = "none";
+              document.getElementById("second").style.display = "block";
+            }
+            else if (newSearch == "second") {
+              document.getElementById("second").style.display = "none";
+              document.getElementById("third").style.display = 'block';
+            }
+          }
+        </script>
+        
+        <!--Another way to switch screens-->
+        <script>
+            // show the home screen
+            $("#home").show();
+            
+            // when a nav link is clicked, hide screens then show target
+            $("li a").on("click", function() {
+            	$(".screen").hide();
+                var targetSelector = $(this).attr("href");
+                console.log(targetSelector);
+                $(targetSelector).show();
+            });
+            function initMap() {
+                
+                //when button is clicked
+                $("#btnSearch").on("click", function() {
+                    $.get(
+                        //gets value entered in search box and adds it to var url
+                        url.replace("<school type goes here>", $("#schoolType").val())
+                    )
+                    .done(function(response) {
+                        
+                        //centers map on chicago & creates it
+                        var myLatLng = {lat: 41.8781, lng: -87.6298};
+                        var map = new google.maps.Map(document.getElementById('map'), {
+                            zoom: 10,
+                            center: myLatLng,
+                        });
+                        
+                    
+                    });
+                });
+            }
+        </script>
+        
+        <!--Google api script-->
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU&callback=initMap">
+        </script>
     </body>
 </html>

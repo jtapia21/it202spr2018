@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> </title>
+    </head>
+    <body>
+        
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>  
+        <script>
+            //API: https://data.cityofchicago.org/resource/tt4n-kn4t.json
+            // Get the part time employees who work for the city concil 
+            
+            //////////tral and error 
+            //var url = "https://data.cityofchicago.org/resource/tt4n-kn4t.json"
+            //"https://data.cityofchicago.org/resource/tt4n-kn4t.json?$select=department,sum(annual_salary)&$group=department"
+            
+        $.get("https://data.cityofchicago.org/resource/tt4n-kn4t.json?$select=department,sum(annual_salary)&$group=department")
+          .done( function(response) {
+            console.log(response);
+            $.each(response, function(i,v) {
+              data.addRow([v.department, parseFloat(v.sum_annual_salary)]);
+            })
+          })
+            
+        </script>
+    </body>
+</html>
