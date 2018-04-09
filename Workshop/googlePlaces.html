@@ -20,6 +20,10 @@
     <body>
         
         <div id="map"> <!-- map loads here... --> </div>
+        <div id = "search"></div>
+        <input type="text" placeholder = "Search Restuarant" id = "userInput"/>
+        <button id = "btnSearch" class = "btn btn-primary" type = "submit" onclick = "getInput()">Search</button>
+        <p id="demo"></p>
         
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
@@ -36,63 +40,140 @@
     //   }
       
       
-    var map;
-    var infowindow;
+    // var map;
+    // var infowindow;
 
-    //create map 
-    function initMap() {
-        var myLatLng = {lat: 41.8781, lng: -87.6298};
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: myLatLng,
-            zoom: 15
-        });
+    // //create map 
+    // function getInput(){
+    //     var x = document.getElementById("userInput").value;
+    //     document.getElementById("demo").innerHTML = x;
+    // }
+    // function initMap() {
         
-        var request = {
-          location: myLatLng, //set map location
-          radius: 8047, //set map radius for map 
-          //type: ['restaurant'] //type of search 
-          query: '' //add user text here
-        }
-        /////make code to add user input here/////
-        
-        infowindow = new google.maps.InfoWindow();
-        var service = new google.maps.places.PlacesService(map);
-        service.textSearch(request, callback);
-        //service.nearbySearch(request, callback);
-        //service.nearbySearch(request, callback);
-      }
+    //     //when button is clicked
+    //     // $("#btnSearch").on("click", function() {
+    //     //     $.get(
+    //     //         //gets value entered in search box and adds it to var url
+    //     //         url.replace("<school type goes here>", $("#schoolType").val())
+    //     //     )
+    //     // .done(function(response) {
+                        
+    //         var myLatLng = {lat: 41.8781, lng: -87.6298};
+    //         map = new google.maps.Map(document.getElementById('map'), {
+    //             center: myLatLng,
+    //             zoom: 15
+    //         });
+            
+    //         var request = {
+    //           location: myLatLng, //set map location
+    //           radius: 16093.44, //set map radius for map 
+    //           //type: ['restaurant'] //type of search 
+    //           //query: "'Mcdonalds'" //search query i.e. name of restuarant
+    //           query: document.getElementById("'userInput'").value
+    //         }
+    //         //add search code here////
+            
+            
+    //         infowindow = new google.maps.InfoWindow();
+    //         var service = new google.maps.places.PlacesService(map);
+    //         service.textSearch(request, callback);
+    //         //service.nearbySearch(request, callback);
+    //         //service.nearbySearch(request, callback);
+    // }
+    
+    //     function callback(results, status) {
+    //         if (status === google.maps.places.PlacesServiceStatus.OK) {
+    //             for (var i = 0; i < results.length; i++) {
+    //                 createMarker(results[i]);
+    //                 //console.log(results);
+    //             }
+    //         }
+    // }
+      
+      
+    // function createMarker(place) {
+    //     var placeLoc = place.geometry.location;
+    //     var marker = new google.maps.Marker({
+    //         map: map,
+    //         position: place.geometry.location
+    //     });
+    //     console.log(place);
 
-    function callback(results, status) {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-            for (var i = 0; i < results.length; i++) {
-                createMarker(results[i]);
-                //console.log(results);
-            }
+    //     google.maps.event.addListener(marker, 'click', function() {
+    //         infowindow.setContent(place.name);
+    //         infowindow.open(map, this);
+    //     });
+    // }
+    
+    function initialize() {
+      var mapOptions = {
+        center: {lat: 41.8781, lng: -87.6298},
+        zoom: 13,
+        scrollwheel: true
+        //query: "restuarant"
+      };
+      var map = new google.maps.Map(document.getElementById('map'),
+        mapOptions);
+    
+      var input = /** @type {HTMLInputElement} */(
+          document.getElementById('userInput'));
+    
+      // Create the autocomplete helper, and associate it with
+      // an HTML text input box.
+      var autocomplete = new google.maps.places.Autocomplete(input);
+      autocomplete.bindTo('bounds', map);
+    
+      //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+      //map.controls[google.maps.ControlPosition.userInput].push(input);
+    
+      var infowindow = new google.maps.InfoWindow();
+      var marker = new google.maps.Marker({
+        map: map
+      });
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(map, marker);
+      });
+    
+      // Get the full place details when the user selects a place from the
+      // list of suggestions.
+      google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        infowindow.close();
+        var place = autocomplete.getPlace();
+        if (!place.geometry) {
+          return;
         }
+    
+        if (place.geometry.viewport) {
+          map.fitBounds(place.geometry.viewport);
+        } else {
+          map.setCenter(place.geometry.location);
+          map.setZoom(17);
+        }
+    
+        // Set the position of the marker using the place ID and location.
+        marker.setPlace(/** @type {!google.maps.Place} */ ({
+          placeId: place.place_id,
+          location: place.geometry.location
+        }));
+        marker.setVisible(true);
+    
+        infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+            'Place ID: ' + place.place_id + '<br>' +
+            place.formatted_address + '</div>');
+        infowindow.open(map, marker);
+      });
     }
-      
-      
-    function createMarker(place) {
-        var placeLoc = place.geometry.location;
-        var marker = new google.maps.Marker({
-            map: map,
-            position: place.geometry.location
-        });
-        console.log(place);
 
-        google.maps.event.addListener(marker, 'click', function() {
-            infowindow.setContent(place.name);
-            infowindow.open(map, this);
-        });
-      }
+// Run the initialize function when the window has finished loading.
+//var map = google.maps.event.addDomListener(window, 'load', initialize);
     </script>
         
-        <!--<script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU&callback=initialize&libraries=places">
-        </script>-->
         <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU&callback=initMap&libraries=places">
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU&callback=initialize&libraries=places">
         </script>
+        <!--<script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU&callback=initMap&libraries=places">
+        </script>-->
         <!--<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>-->
     </body>
 </html>

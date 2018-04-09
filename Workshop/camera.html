@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Projecct 5: CloudVision</title>
+    </head>
+    <body>
+        
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        
+        
+        <video id="player" controls autoplay></video>
+        <button id="capture">Capture</button>
+        <canvas id="canvas" width=320 height=240></canvas>
+        <script>
+          const player = document.getElementById('player');
+          const canvas = document.getElementById('canvas');
+          const context = canvas.getContext('2d');
+          const captureButton = document.getElementById('capture');
+          var requestBody;
+          const constraints = {
+            video: true,
+          };
+        
+          captureButton.addEventListener('click', () => {
+            // Draw the video frame to the canvas.
+            context.drawImage(player, 0, 0, canvas.width, canvas.height);
+          });
+        
+          // Attach the video stream to the video element and autoplay.
+          navigator.mediaDevices.getUserMedia(constraints)
+            .then((stream) => {
+              player.srcObject = stream;
+            });
+            
+            function myFunction() {
+                requestBody = {
+                    "requests":[
+                        {
+                          "image":{
+                            //"content":"/9j/7QBEUGhvdG9...image contents...eYxxxzj/Coa6Bax//Z"
+                            "content": canvas.toDataURL.split(",")[1]
+                          },
+                          "features":[
+                            {
+                              "type":"LABEL_DETECTION",
+                              "maxResults":1
+                            }
+                          ]
+                        }
+                      ]
+                }
+                //POST https://vision.googleapis.com/v1/images:annotate?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU
+                $.ajax({
+                    method: "Post",
+                    contentType: "application/json",
+                    url: visionApiEndpoint + "?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU",
+                    data: JSON.stringify(requestBody)
+                }).done(function(response){
+                   console.log(response);
+                   $("#image").html("<pre>" + JSON.stringify(response) + "</pre>")
+                });
+            }
+        </script>
+        <script> 
+
+
+        </script>
+    </body>
+</html>
