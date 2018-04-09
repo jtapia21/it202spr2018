@@ -28,7 +28,7 @@
             var player = { x: c.width / 2, y: c.height / 2, r: 25, color: "blue", speed: 10 };
             var target = { x: c.width / 4, y: c.height / 4, r: 25, color: "red" };
 
-            var utter = new SpeechSynthesisUtterance('collision');
+            var utter = new SpeechSynthesisUtterance('It Works');
 
 
             function draw() {
@@ -59,7 +59,7 @@
                     //var synth = window.speechSynthesis;
                     window.speechSynthesis.speak(utter);
                     
-                                        //reset position
+                    //reset position
                     player.x = c.width/2;
                     player.y = c.height/2;
 
