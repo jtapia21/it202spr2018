@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <title>google place api</title>
+        <style>
+        
+            .screen {
+              display: none;
+              min-height: 999px;
+              color: white;
+              padding: 15px;
+            }
+            
+            #map {
+              height: 600px;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <div id="map"> <!-- map loads here... --> </div>
+        
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        
+    <script>
+    //   function initMap() {
+    //     var myLatLng = {lat: 41.8781, lng: -87.6298};
+    //     var myMap = new google.maps.Map(document.getElementById('map'), {
+    //       zoom: 10,
+    //       center: myLatLng
+    //     });
+    //   }
+      
+      
+    var map;
+    var infowindow;
+
+    //create map 
+    function initMap() {
+        var myLatLng = {lat: 41.8781, lng: -87.6298};
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: myLatLng,
+            zoom: 15
+        });
+        
+        var request = {
+          location: myLatLng, //set map location
+          radius: 8047, //set map radius for map 
+          //type: ['restaurant'] //type of search 
+          query: '' //add user text here
+        }
+        /////make code to add user input here/////
+        
+        infowindow = new google.maps.InfoWindow();
+        var service = new google.maps.places.PlacesService(map);
+        service.textSearch(request, callback);
+        //service.nearbySearch(request, callback);
+        //service.nearbySearch(request, callback);
+      }
+
+    function callback(results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            for (var i = 0; i < results.length; i++) {
+                createMarker(results[i]);
+                //console.log(results);
+            }
+        }
+    }
+      
+      
+    function createMarker(place) {
+        var placeLoc = place.geometry.location;
+        var marker = new google.maps.Marker({
+            map: map,
+            position: place.geometry.location
+        });
+        console.log(place);
+
+        google.maps.event.addListener(marker, 'click', function() {
+            infowindow.setContent(place.name);
+            infowindow.open(map, this);
+        });
+      }
+    </script>
+        
+        <!--<script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU&callback=initialize&libraries=places">
+        </script>-->
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU&callback=initMap&libraries=places">
+        </script>
+        <!--<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>-->
+    </body>
+</html>

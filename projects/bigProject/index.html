@@ -35,7 +35,7 @@
             }
             
             #map {
-              height: 500px;
+              height: 800px;
             }
             
             nav {
@@ -100,7 +100,7 @@
              <h1>Map</h1>
              <h3></h3>
              <div id="map"></div>
-             <div id = "results"></div>
+             <div id = "myResults"></div>
         </div>
         
         <!--map screen-->
@@ -136,8 +136,8 @@
           }
         </script>
         
-        <!--Another way to switch screens-->
         <script>
+            //Another way to switch screens
             // show the home screen
             $("#home").show();
             
@@ -145,35 +145,30 @@
             $("li a").on("click", function() {
             	$(".screen").hide();
                 var targetSelector = $(this).attr("href");
-                console.log(targetSelector);
+                //console.log(targetSelector);
                 $(targetSelector).show();
             });
             function initMap() {
-                
-                //when button is clicked
-                $("#btnSearch").on("click", function() {
-                    $.get(
-                        //gets value entered in search box and adds it to var url
-                        url.replace("<school type goes here>", $("#schoolType").val())
-                    )
-                    .done(function(response) {
-                        
-                        //centers map on chicago & creates it
-                        var myLatLng = {lat: 41.8781, lng: -87.6298};
-                        var map = new google.maps.Map(document.getElementById('map'), {
-                            zoom: 10,
-                            center: myLatLng,
-                        });
-                        
-                    
-                    });
+                //centers map on chicago & creates it
+                var myLatLng = {lat: 41.8781, lng: -87.6298};
+                var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: myLatLng,
                 });
-            }
+                
+                var request = {
+                    location: myLatLng,
+                    radius: 8047, 
+                    types: ['restaurant']
+                };
+                console.log(request);
+            }//End of initMap
+            
         </script>
         
         <!--Google api script-->
         <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU&callback=initMap">
+            src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU&callback=initMap">
         </script>
     </body>
 </html>
