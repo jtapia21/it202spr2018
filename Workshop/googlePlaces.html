@@ -13,16 +13,22 @@
             }
             
             #map {
-              height: 600px;
+              height: 700px;
             }
         </style>
     </head>
     <body>
-        
+
         <div id="map"> <!-- map loads here... --> </div>
         <div id = "search"></div>
-        <input type="text" placeholder = "Search Restuarant" id = "userInput"/>
-        <button id = "btnSearch" class = "btn btn-primary" type = "submit" onclick = "getInput()">Search</button>
+        <div id="floating-panel">
+            <input type="text" placeholder = "Search your destination" id = "userInput"/>
+            <button id = "btnSearch" class = "btn btn-primary" type = "submit" onclick = "getInput()">Search</button>
+            <button onclick="toggleHeatmap()">Toggle Heatmap</button>
+            <button onclick="changeGradient()">Change gradient</button>
+            <button onclick="changeRadius()">Change radius</button>
+            <button onclick="changeOpacity()">Change opacity</button>
+        </div>
         <p id="demo"></p>
         
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -105,18 +111,105 @@
     //     });
     // }
     
-    function initialize() {
-      var mapOptions = {
-        center: {lat: 41.8781, lng: -87.6298},
-        zoom: 13,
-        scrollwheel: true
-        //query: "restuarant"
-      };
-      var map = new google.maps.Map(document.getElementById('map'),
-        mapOptions);
+    // function initialize() {
+    //   var mapOptions = {
+    //     center: {lat: 41.8781, lng: -87.6298},
+    //     zoom: 13,
+    //     scrollwheel: true
+    //     //query: "restuarant"
+    //   };
+    //   var map = new google.maps.Map(document.getElementById('map'),
+    //     mapOptions);
     
-      var input = /** @type {HTMLInputElement} */(
-          document.getElementById('userInput'));
+    //   var input = /** @type {HTMLInputElement} */(
+    //       document.getElementById('userInput'));
+    
+    //   // Create the autocomplete helper, and associate it with
+    //   // an HTML text input box.
+    //   var autocomplete = new google.maps.places.Autocomplete(input);
+    //   autocomplete.bindTo('bounds', map);
+    
+    //   //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+    //   //map.controls[google.maps.ControlPosition.userInput].push(input);
+    
+    //   var infowindow = new google.maps.InfoWindow();
+    //   var marker = new google.maps.Marker({
+    //     map: map
+    //   });
+    //   google.maps.event.addListener(marker, 'click', function() {
+    //     infowindow.open(map, marker);
+    //   });
+    
+    //   // Get the full place details when the user selects a place from the
+    //   // list of suggestions.
+    //   google.maps.event.addListener(autocomplete, 'place_changed', function() {
+    //     infowindow.close();
+    //     var place = autocomplete.getPlace();
+    //     if (!place.geometry) {
+    //       return;
+    //     }
+    
+    //     if (place.geometry.viewport) {
+    //       map.fitBounds(place.geometry.viewport);
+    //     } else {
+    //       map.setCenter(place.geometry.location);
+    //       map.setZoom(17);
+    //     }
+    
+    //     // Set the position of the marker using the place ID and location.
+    //     marker.setPlace(/** @type {!google.maps.Place} */ ({
+    //       placeId: place.place_id,
+    //       location: place.geometry.location
+    //     }));
+    //     marker.setVisible(true);
+    
+    //     infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+    //         'Place ID: ' + place.place_id + '<br>' +
+    //         place.formatted_address + '</div>');
+    //     infowindow.open(map, marker);
+    //   });
+    // }
+
+// Run the initialize function when the window has finished loading.
+//var map = google.maps.event.addDomListener(window, 'load', initialize);
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    var map;
+    var heatmap;
+    function initialize() {
+        
+        // var arrayPoints = [];
+        // //https://data.cityofchicago.org/resource/dfnk-7re6.json
+        
+        // //$.get("https://data.cityofchicago.org/resource/787j-mys9.json")
+        // $.get("https://data.cityofchicago.org/resource/dfnk-7re6.json")
+        //   .done(function(response) {
+        //     map = new google.maps.Map(document.getElementById('map'), {
+        //   zoom: 13,
+        //   center: {lat: parseFloat(response[0].latitude), lng: parseFloat(response[0].longitude)},
+        //   mapTypeId: 'satellite'
+        // });
+        
+        var arrayPoints = [];
+        $.get("https://data.cityofchicago.org/resource/787j-mys9.json")
+        .done(function(response) {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: 41.8781, lng: -87.6298},
+                zoom: 13,
+                scrollwheel: true,
+                types: ['restaurant']
+            }); 
+        // var mapOptions = {
+        //     center: {lat: 41.8781, lng: -87.6298},
+        //     zoom: 13,
+        //     scrollwheel: true
+        //     //query: "restuarant"
+        // };
+    //   var map = new google.maps.Map(document.getElementById('map'),
+    //     mapOptions);
+    
+      var input = (document.getElementById('userInput'));
     
       // Create the autocomplete helper, and associate it with
       // an HTML text input box.
@@ -147,7 +240,7 @@
           map.fitBounds(place.geometry.viewport);
         } else {
           map.setCenter(place.geometry.location);
-          map.setZoom(17);
+          map.setZoom(13);
         }
     
         // Set the position of the marker using the place ID and location.
@@ -160,17 +253,65 @@
         infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
             'Place ID: ' + place.place_id + '<br>' +
             place.formatted_address + '</div>');
-        infowindow.open(map, marker);
-      });
-    }
+            infowindow.open(map, marker);
+            });
+            
+            console.log(response);
+            $.each(response, function(i,v) {
+              console.log(v);
+              if (v.hasOwnProperty("latitude") && v.hasOwnProperty("longitude")) {
+              
+                arrayPoints.push(new google.maps.LatLng(parseFloat(v.latitude), parseFloat(v.longitude)))
+              }
+            })
 
-// Run the initialize function when the window has finished loading.
-//var map = google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
+            heatmap = new google.maps.visualization.HeatmapLayer({
+                data: arrayPoints,
+                map: map
+              });
         
-        <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU&callback=initialize&libraries=places">
-        </script>
+        })
+    }
+    
+      function toggleHeatmap() {
+        heatmap.setMap(heatmap.getMap() ? null : map);
+      }
+
+      function changeGradient() {
+        var gradient = [
+          'rgba(0, 255, 255, 0)',
+          'rgba(0, 255, 255, 1)',
+          'rgba(0, 191, 255, 1)',
+          'rgba(0, 127, 255, 1)',
+          'rgba(0, 63, 255, 1)',
+          'rgba(0, 0, 255, 1)',
+          'rgba(0, 0, 223, 1)',
+          'rgba(0, 0, 191, 1)',
+          'rgba(0, 0, 159, 1)',
+          'rgba(0, 0, 127, 1)',
+          'rgba(63, 0, 91, 1)',
+          'rgba(127, 0, 63, 1)',
+          'rgba(191, 0, 31, 1)',
+          'rgba(255, 0, 0, 1)'
+        ]
+        heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+      }
+
+      function changeRadius() {
+        heatmap.set('radius', heatmap.get('radius') ? null : 20);
+      }
+
+      function changeOpacity() {
+        heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+      }
+    </script>
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU&callback=initialize&libraries=places,visualization">
+    </script>
         <!--<script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU&callback=initMap&libraries=places">
         </script>-->

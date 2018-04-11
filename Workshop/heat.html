@@ -61,9 +61,10 @@
         
         
         var arrayPoints = [];
+        //https://data.cityofchicago.org/resource/dfnk-7re6.json
         
-        
-        $.get("https://data.cityofchicago.org/resource/787j-mys9.json")
+        //$.get("https://data.cityofchicago.org/resource/787j-mys9.json")
+        $.get("https://data.cityofchicago.org/resource/dfnk-7re6.json")
           .done(function(response) {
             map = new google.maps.Map(document.getElementById('map'), {
           zoom: 13,
@@ -71,32 +72,20 @@
           mapTypeId: 'satellite'
         });
             
-            
             console.log(response);
             $.each(response, function(i,v) {
               console.log(v);
               if (v.hasOwnProperty("latitude") && v.hasOwnProperty("longitude")) {
               
-              
-              
-              arrayPoints.push(new google.maps.LatLng(parseFloat(v.latitude), parseFloat(v.longitude)))
+                arrayPoints.push(new google.maps.LatLng(parseFloat(v.latitude), parseFloat(v.longitude)))
               }
-                
-                
-              })
+            })
 
             heatmap = new google.maps.visualization.HeatmapLayer({
                 data: arrayPoints,
                 map: map
               });
-
-           
           })
-
-
-
-
-  
       }
 
       function toggleHeatmap() {

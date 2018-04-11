@@ -19,7 +19,9 @@
           const canvas = document.getElementById('canvas');
           const context = canvas.getContext('2d');
           const captureButton = document.getElementById('capture');
-          var requestBody;
+          //var requestBody;
+          var visionApiEndpoint = "https://vision.googleapis.com/v1/images:annotate?key=";
+          
           const constraints = {
             video: true,
           };
@@ -35,13 +37,13 @@
               player.srcObject = stream;
             });
             
-            function myFunction() {
+            function getImageData() {
                 requestBody = {
                     "requests":[
                         {
                           "image":{
                             //"content":"/9j/7QBEUGhvdG9...image contents...eYxxxzj/Coa6Bax//Z"
-                            "content": canvas.toDataURL.split(",")[1]
+                            "content": canvas.toDataURL().split(",")[1]
                           },
                           "features":[
                             {
