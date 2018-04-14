@@ -82,33 +82,50 @@
         <!--navigation bar-->
         <nav>
             <li><a class="active" href="#home">Home</a></li>
-            <li><a href="#second">Restaurant</a></li>
-            <li><a href="#third">Crime</a></li>
+            <li><a href="#second">Destination</a></li>
+            <li><a href="#third">Settings</a></li>
         </nav>
 
         <!--home screen-->
         <div id="home" class="screen" style="text-align:center">
             <h1>Welcome!</h1>
-            <h3>Search for your restaurant</h3>
-            <input type = "text" placeholder = "Restaurant">
+            <h3>Search for your location.</h3>
+            <input type = "text" placeholder = "Enter Location" id = "userInput"/>
             <button id = "btnSearch" class = "btn btn-primary" type = "submit" onClick = "switchTo('home')" >Get Started</button>
         </div>
 
-        <!--search screen-->
+        <!--map screen-->
         <div id = "second" class = "form-group form-inline screen" style="text-align:center">
             <!--some code for second screen --> 
-             <h1>Map</h1>
-             <h3></h3>
-             <div id="map"></div>
-             <div id = "myResults"></div>
+            <h1>Map</h1>
+            <button onclick="toggleHeatmap()" style = "float: left;">Toggle Heatmap</button>
+            <button onclick="changeGradient()" >Change gradient</button>
+            <button onclick="changeRadius()" >Change radius</button>
+            <button onclick="changeOpacity()" style = "float: right;">Change opacity</button>
+            <div id = "map"></div>
         </div>
         
-        <!--map screen-->
+        <!--settings screen-->
         <div id="third" class="screen" style="text-align:center">
-          <!--<h1>Map</h1>
-          <h3></h3>
-          <div id="map"></div>
-          <div id = "results"></div>-->
+          <div class="mdc-form-field">
+            <div class="mdc-checkbox">
+              <input type="checkbox"
+                     id="my-checkbox"
+                     class="mdc-checkbox__native-control"/>
+              <div class="mdc-checkbox__background">
+                <svg class="mdc-checkbox__checkmark"
+                     viewBox="0 0 24 24">
+                  <path class="mdc-checkbox__checkmark-path"
+                        fill="none"
+                        stroke="white"
+                        d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
+                </svg>
+                <div class="mdc-checkbox__mixedmark"></div>
+              </div>
+            </div>
+          
+            <label for="my-checkbox">My Checkbox Label</label>
+          </div>
         </div>
         
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -136,39 +153,138 @@
           }
         </script>
         
+        <!--Script for both map api's and switch screens -->
         <script>
-            //Another way to switch screens
-            // show the home screen
-            $("#home").show();
+          //Another way to switch screens
+          // show the home screen
+          $("#home").show();
             
-            // when a nav link is clicked, hide screens then show target
-            $("li a").on("click", function() {
-            	$(".screen").hide();
-                var targetSelector = $(this).attr("href");
-                //console.log(targetSelector);
-                $(targetSelector).show();
+          // when a nav link is clicked, hide screens then show target
+          $("li a").on("click", function() {
+            $(".screen").hide();
+              var targetSelector = $(this).attr("href");
+              //console.log(targetSelector);
+              $(targetSelector).show();
+          });
+
+          var map;
+          var heatmap;
+          function initialize() {
+              
+              var arrayPoints = [];
+              $.get("https://data.cityofchicago.org/resource/787j-mys9.json")
+              .done(function(response) {
+                  map = new google.maps.Map(document.getElementById('map'), {
+                      center: {lat: 41.8781, lng: -87.6298},
+                      //radius: 16093.44,
+                      zoom: 13,
+                      //types: ['restaurant'],
+                      //query: "restuarant",
+                      scrollwheel: true
+                  }); 
+                  
+            var input = (document.getElementById('userInput'));
+          
+            // Create the autocomplete helper, and associate it with
+            // an HTML text input box.
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.bindTo('bounds', map);
+          
+            //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+            //map.controls[google.maps.ControlPosition.userInput].push(input);
+          
+            var infowindow = new google.maps.InfoWindow();
+            var marker = new google.maps.Marker({
+              map: map
             });
-            function initMap() {
-                //centers map on chicago & creates it
-                var myLatLng = {lat: 41.8781, lng: -87.6298};
-                var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 10,
-                center: myLatLng,
-                });
-                
-                var request = {
-                    location: myLatLng,
-                    radius: 8047, 
-                    types: ['restaurant']
-                };
-                console.log(request);
-            }//End of initMap
-            
-        </script>
+            google.maps.event.addListener(marker, 'click', function() {
+              infowindow.open(map, marker);
+            });
+          
+            // Get the full place details when the user selects a place from the
+            // list of suggestions.
+            google.maps.event.addListener(autocomplete, 'place_changed', function() {
+              infowindow.close();
+              var place = autocomplete.getPlace();
+              if (!place.geometry) {
+                return;
+              }
+          
+              if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+              } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(13);
+              }
+          
+              // Set the position of the marker using the place ID and location.
+              marker.setPlace(({
+                placeId: place.place_id,
+                location: place.geometry.location
+              }));
+              marker.setVisible(true);
+              
+              infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+                  place.formatted_address + '</div>');
+                  infowindow.open(map, marker);
+                  });
+                  
+                  console.log(marker);
+                  $.each(response, function(i,v) {
+                    console.log(v);
+                    if (v.hasOwnProperty("latitude") && v.hasOwnProperty("longitude")) {
+                    
+                      arrayPoints.push(new google.maps.LatLng(parseFloat(v.latitude), parseFloat(v.longitude)))
+                    }
+                  })
+      
+                  heatmap = new google.maps.visualization.HeatmapLayer({
+                      data: arrayPoints,
+                      map: map
+                    });
+              
+              })
+          }
+          
+            function toggleHeatmap() {
+              heatmap.setMap(heatmap.getMap() ? null : map);
+            }
+      
+            function changeGradient() {
+              var gradient = [
+                'rgba(0, 255, 255, 0)',
+                'rgba(0, 255, 255, 1)',
+                'rgba(0, 191, 255, 1)',
+                'rgba(0, 127, 255, 1)',
+                'rgba(0, 63, 255, 1)',
+                'rgba(0, 0, 255, 1)',
+                'rgba(0, 0, 223, 1)',
+                'rgba(0, 0, 191, 1)',
+                'rgba(0, 0, 159, 1)',
+                'rgba(0, 0, 127, 1)',
+                'rgba(63, 0, 91, 1)',
+                'rgba(127, 0, 63, 1)',
+                'rgba(191, 0, 31, 1)',
+                'rgba(255, 0, 0, 1)'
+              ]
+              heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+            }
+      
+            function changeRadius() {
+              heatmap.set('radius', heatmap.get('radius') ? null : 20);
+            }
+      
+            function changeOpacity() {
+              heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+            }
+        </script><!--End of both api's script-->
         
-        <!--Google api script-->
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
         <script async defer
-            src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU&callback=initMap">
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU&callback=initialize&libraries=places,visualization">
         </script>
     </body>
 </html>

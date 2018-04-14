@@ -9,6 +9,7 @@
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        <script src= "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         
         
         <video id="player" controls autoplay></video>
@@ -58,7 +59,7 @@
                 $.ajax({
                     method: "Post",
                     contentType: "application/json",
-                    url: visionApiEndpoint + "?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU",
+                    url: visionApiEndpoint + "AIzaSyAx9rxfpIjJEQ75l2CeLbtWA68HNPSr8YY",
                     data: JSON.stringify(requestBody)
                 }).done(function(response){
                    console.log(response);
