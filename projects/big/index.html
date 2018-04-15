@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <html>
     <head>
-    <!-- Bootstrap CSS -->
+        <!--
+          material componets
+          two sets of data api (checked)
+          data visualization (checked)
+          data store and retrive from indexedDB (in progress)
+          app intereactions (checked)
+          shell assets for the server workers to cache
+        -->
+        <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+
         <title>Big Project</title>
         <style>
             .screen {
@@ -164,7 +174,7 @@
           
         </script><!--Ennd of switching screens script-->
         
-        <script> // Script for both map api's and switch screens
+        <script> // Script for data api's
         
           var map;
           var heatmap;
@@ -276,7 +286,7 @@
             function changeOpacity() {
               heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
             }
-        </script><!--End of both api's script-->
+        </script><!--End of data api's script-->
         
         <script>// Script to add voice api to the userInput
           //Set variables for voice 
@@ -303,6 +313,85 @@
             }//End of if statement
           });//End of button event listener
         </script><!--End of voice api script-->
+        
+        <script>//indexDB script
+          //////TODO save user's last searched input and save user settings/////
+          // var existingSettings = [];
+          
+          // db.open().then(function() {
+          //   console.log("db.open");
+          //   return db.settings.each(setting => {
+          //       existingSettings.push(setting.name);
+          //   });
+
+          // }).then (function() {
+          //   console.log("ensure settings exist");
+          //     console.log("existing settings", existingSettings);
+          //     // make sure all settings are in db before updating UI
+          //     var settingName="",defaultValue = "";
+              
+          //     for (var i=0; i<appSettings.length; i++) {
+          //         settingName = appSettings[i].name;
+          //         // if doesn't exist, add
+          //         console.log(existingSettings.indexOf(settingName));
+          //         if (existingSettings.indexOf(settingName) < 0) {
+          //           // // set default value
+          //           // if (appSettings[i].type == "boolean") {
+          //           //     defaultValue = false;
+          //           // } else {
+          //           //     defaultValue = "";
+          //           // }
+          //           console.log(settingName, defaultValue);
+          //           db.settings.add({"name": settingName,"value":defaultValue});
+          //         }
+    
+          //     }
+              
+              
+          // }).then(function() {
+          //   console.log("loop and update UI");
+          //       var element;
+          //     db.settings.each(setting => {
+          //       element = $("<input>").addClass("settingValue");
+          //       if ([true,false].indexOf(setting.value) >= 0) {
+          //           element.attr("type","checkbox");
+          //           element.attr("id", setting.name);
+          //           if (setting.value == true) {
+          //               element.prop( "checked", true );
+          //           }
+                    
+          //       } else {
+          //           element.attr("type","texdt");
+          //           element.attr("id", setting.name);
+          //           element.val(setting.value);
+          //       }
+          //       $("body").append(setting.name," ",element,"<br>");
+          //   });
+              
+              
+          //   }).catch(function(error) {
+
+          //   console.log ("Ooops: " + error);
+          //   alert ("Ooops: " + error);
+          // });  
+          
+          
+          
+          // $("body").on("change", ".settingValue", function() {
+          //   var newValue;
+          //   if ($(this).attr("type") == "checkbox") {
+          //       newValue = $(this).prop("checked");
+          //   } else {
+          //       newValue = $(this).val();
+          //   }
+             
+          //   db.settings.put({"name": $(this).attr("id"), "value": newValue});
+          //   console.log("value updated");
+          // });
+        </script><!--End of indexDB script-->
+        
+        <script> //serverWorkers script
+        </script><!--End of serverWOrkers script-->
         
         <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
