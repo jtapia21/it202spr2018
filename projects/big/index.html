@@ -132,8 +132,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
         
-        <!--Script to switch screens-->
-        <script>
+        <script> // Script to switch screens
           $(document).ready(function(){
             document.getElementById("home").style.display = "block" ;
             
@@ -150,10 +149,7 @@
               document.getElementById("third").style.display = 'block';
             }
           }
-        </script>
-        
-        <!--Script for both map api's and switch screens -->
-        <script>
+          
           //Another way to switch screens
           // show the home screen
           $("#home").show();
@@ -165,7 +161,11 @@
               //console.log(targetSelector);
               $(targetSelector).show();
           });
-
+          
+        </script><!--Ennd of switching screens script-->
+        
+        <script> // Script for both map api's and switch screens
+        
           var map;
           var heatmap;
           function initialize() {
