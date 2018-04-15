@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Projecct 5: CloudVision</title>
+    </head>
+    <body>
+        <script
+          src="https://code.jquery.com/jquery-3.3.1.min.js"
+          integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+          crossorigin="anonymous"></script>
+        
+        <video id="player" controls autoplay></video>
+        <button id="capture">Capture</button>
+        <canvas id="canvas" width=320 height=240></canvas>
+        <div id="imageData" ></div>
+
+        <script>
+          const player = document.getElementById('player');
+          const canvas = document.getElementById('canvas');
+          //const canvas2 = document.getElementById('canvas2');
+          const context = canvas.getContext('2d');
+          //const otherCon = canvas2.getContext('2d');
+          const captureButton = document.getElementById('capture');
+          const dataDiv = document.getElementById('imageData');
+          var doFaceCapture = false;
+          var visionApiEndpoint = "https://vision.googleapis.com/v1/images:annotate?key=";
+          var nextX = 0, nextY = 0;
+          
+          const constraints = {
+            video: true,
+          };
+        
+          captureButton.addEventListener('click', () => {
+            // Draw the video frame to the canvas.
+            doFaceCapture = true;
+            context.drawImage(player, 0, 0, canvas.width, canvas.height);
+            getImageData('FACE_DETECTION');
+          });
+        
+          // Attach the video stream to the video element and autoplay.
+          navigator.mediaDevices.getUserMedia(constraints)
+            .then((stream) => {
+              player.srcObject = stream;
+            });
+            
+            function getImageData(type) {
+                requestBody = {
+                    "requests":[
+                        {
+                          "image":{
+                            //"content":"/9j/7QBEUGhvdG9...image contents...eYxxxzj/Coa6Bax//Z"
+                            "content": canvas.toDataURL().split(",")[1]
+                          },
+                          "features":[
+                            {
+                              "type": type,
+                              "maxResults": 1
+                            }
+                          ]
+                        }
+                      ]
+                }
+                //POST https://vision.googleapis.com/v1/images:annotate?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU
+                $.ajax({
+                    method: "Post",
+                    contentType: "application/json",
+                    url: visionApiEndpoint + "AIzaSyAx9rxfpIjJEQ75l2CeLbtWA68HNPSr8YY",
+                    data: JSON.stringify(requestBody)
+                }).done(function(response){
+                    console.log(response);
+                    $("#image").html("<pre>" + JSON.stringify(response) + "</pre>")
+                   
+                    var faceVertices = response.responses[0].faceAnnotations[0].boundingPoly.vertices;
+                    console.log(faceVertices);
+                          
+                    // find corners
+                    var topLeft = faceVertices[0];
+                    var bottomRight = faceVertices[2];
+                    console.log(bottomRight, bottomRight.x, topLeft, topLeft.x);
+                    
+                    // determine width and height for cropping
+                    var faceWidth = bottomRight.x - topLeft.x;
+                    var faceHeight = bottomRight.y - topLeft.y;
+                    var sourceX = topLeft.x;
+                    var sourceY = topLeft.y;
+                    
+                    context.drawImage(canvas, sourceX, sourceY, faceWidth, faceHeight, nextX, nextY, faceWidth, faceHeight);
+                    
+                    nextX += faceWidth;
+                  
+                    if (doFaceCapture) {
+                      getImageData('FACE_DETECTION');
+                    }
+                    
+                });
+            }
+        </script>
+        <script> 
+
+
+        </script>
+    </body>
+</html>
