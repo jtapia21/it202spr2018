@@ -228,15 +228,15 @@
                   infowindow.open(map, marker);
                   });
                   
-                  console.log(marker);
+                  //console.log(marker);
                   $.each(response, function(i,v) {
-                    console.log(v);
+                    //console.log(v);
                     if (v.hasOwnProperty("latitude") && v.hasOwnProperty("longitude")) {
                     
                       arrayPoints.push(new google.maps.LatLng(parseFloat(v.latitude), parseFloat(v.longitude)))
                     }
                   })
-      
+                  
                   heatmap = new google.maps.visualization.HeatmapLayer({
                       data: arrayPoints,
                       map: map
@@ -277,6 +277,28 @@
               heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
             }
         </script><!--End of both api's script-->
+        
+        <script>// Script to add voice api to the userInput
+          // console.log(userInput.value);
+          // var utter = new SpeechSynthesisUtterance(userInput.value);
+          // window.speechSynthesis.speak(utter);
+          var supportMsg = document.getElementById('msg');
+          var speechMsgInput = document.getElementById('userInput');
+          var button = document.getElementById('btnSearch')
+          
+          function speak(text) {
+            var msg = new SpeechSynthesisUtterance();
+            msg.text = text;
+            
+            window.speechSynthesis.speak(msg);
+          }
+          // Set up an event listener for when the 'speak' button is clicked.
+          button.addEventListener('click', function(e) {
+            if (speechMsgInput.value.length > 0) {
+            	speak(speechMsgInput.value);
+            }
+          });
+        </script><!--End of voice api script-->
         
         <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
