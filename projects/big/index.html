@@ -279,25 +279,29 @@
         </script><!--End of both api's script-->
         
         <script>// Script to add voice api to the userInput
-          // console.log(userInput.value);
-          // var utter = new SpeechSynthesisUtterance(userInput.value);
-          // window.speechSynthesis.speak(utter);
+          //Set variables for voice 
           var supportMsg = document.getElementById('msg');
           var speechMsgInput = document.getElementById('userInput');
           var button = document.getElementById('btnSearch')
           
+          //create a new utter for user input and add it to the queue
           function speak(text) {
+            //create a new speechSunthesisUtterance
             var msg = new SpeechSynthesisUtterance();
+            
+            //set the text
             msg.text = text;
             
+            //queue this utter
             window.speechSynthesis.speak(msg);
-          }
+          }//End of speak function 
+          
           // Set up an event listener for when the 'speak' button is clicked.
           button.addEventListener('click', function(e) {
             if (speechMsgInput.value.length > 0) {
             	speak(speechMsgInput.value);
-            }
-          });
+            }//End of if statement
+          });//End of button event listener
         </script><!--End of voice api script-->
         
         <script
