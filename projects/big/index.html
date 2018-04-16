@@ -19,7 +19,7 @@
             .screen {
               display: none;
               min-height: 999px;
-              color: white;
+
               padding: 15px;
             }
             
@@ -141,16 +141,18 @@
               border-radius: 50%;
             }
         </style>
-    </head>
-    <body>
+        
+    </head><!--End of head-->
+    
+    <body style = "background-color: rgb(255, 255, 255);"> <!--Start of body-->
         <!--////////////navigation bar/////////////////-->
         <nav>
-            <li><a class="active" href="#home">Home</a></li>
+            <li><a class="active" href="#home">Search</a></li>
             <li><a href="#second">Destination</a></li>
             <li><a href="#third">Settings</a></li>
         </nav>
 
-        <!--/////////////////home screen///////////////-->
+        <!--/////////////////Search screen///////////////-->
         <div id="home" class="screen" style="text-align:center">
             <h1>Welcome!</h1>
             <h3>Search for your location.</h3>
@@ -172,20 +174,32 @@
         <!--////////////////settings screen/////////////-->
         <div id="third" class="form-group form-inline screen" style="text-align:center">
           
+          <!--Dark Theme checkbox-->
           <h3>Switch to dark mode </h3>
           <label class="switch">
-            <input type="checkbox" checked>
+            <input type="checkbox" checked onclick="dark()">
             <span class="slider round"></span>
           </label> <!--End of dark mode label-->
+          
+          <script>//Script for dark Theme
+            function dark() {
+                if (document.body.style.backgroundColor == 'rgb(255, 255, 255)') {
+        
+                        document.body.style.backgroundColor = '#333';
+                }//End of if statement
+                else {
+                        document.body.style.backgroundColor = 'rgb(255, 255, 255)';
+                }//End of else statement
+            }//End of dark function
+          </script><!--End of dark theme script-->
           
           <br>
           
           <!--Change the voices here-->
-          <select id ="voice" class="form-group form-inline" placeholder="voice" name="voice" multiple>
-            <option value = "voice1">voice 1</option>
-            <option value = "voice2">voice 2</option>
-            <option value = "voice3">voice 3</option>
-          </select><!--End of change voices selector-->
+        	<div class="option">
+        		<label for="voice">Voice</label>
+        		<select name="voice" id="voice"></select>
+        	</div>
           
           <!--Possibly set the audio on or off-->
         
@@ -454,5 +468,5 @@
         <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBASnTXvPwXm4gq5T9T0bEZ_Ig7QDYNbLU&callback=initialize&libraries=places,visualization">
         </script>
-    </body>
+    </body><!--End of body-->
 </html>
