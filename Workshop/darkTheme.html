@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head >
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body style="background-color: rgb(255, 255, 255)">
+    <p>The button below will switch background color!</p>
+    <button onclick="dark()">Switch color</button>
+    
+    
+    <script>
+    function dark() {
+        if (document.body.style.backgroundColor == 'rgb(255, 255, 255)') {
+
+                document.body.style.backgroundColor = '#333';
+        }
+        else {
+                document.body.style.backgroundColor = 'rgb(255, 255, 255)';
+        }
+    }
+    </script>
+    
+</body>
+</html>

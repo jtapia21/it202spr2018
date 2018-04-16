@@ -85,17 +85,72 @@
             h3 {
               color: black;
             }
+            .switch {
+              position: relative;
+              display: inline-block;
+              width: 60px;
+              height: 34px;
+            }
+            
+            .switch input {display:none;}
+            
+            .slider {
+              position: absolute;
+              cursor: pointer;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background-color: #ccc;
+              -webkit-transition: .4s;
+              transition: .4s;
+            }
+            
+            .slider:before {
+              position: absolute;
+              content: "";
+              height: 26px;
+              width: 26px;
+              left: 4px;
+              bottom: 4px;
+              background-color: white;
+              -webkit-transition: .4s;
+              transition: .4s;
+            }
+            
+            input:checked + .slider {
+              background-color: #2196F3;
+            }
+            
+            input:focus + .slider {
+              box-shadow: 0 0 1px #2196F3;
+            }
+            
+            input:checked + .slider:before {
+              -webkit-transform: translateX(26px);
+              -ms-transform: translateX(26px);
+              transform: translateX(26px);
+            }
+            
+            /* Rounded sliders */
+            .slider.round {
+              border-radius: 34px;
+            }
+            
+            .slider.round:before {
+              border-radius: 50%;
+            }
         </style>
     </head>
     <body>
-        <!--navigation bar-->
+        <!--////////////navigation bar/////////////////-->
         <nav>
             <li><a class="active" href="#home">Home</a></li>
             <li><a href="#second">Destination</a></li>
             <li><a href="#third">Settings</a></li>
         </nav>
 
-        <!--home screen-->
+        <!--/////////////////home screen///////////////-->
         <div id="home" class="screen" style="text-align:center">
             <h1>Welcome!</h1>
             <h3>Search for your location.</h3>
@@ -103,7 +158,7 @@
             <button id = "btnSearch" class = "btn btn-primary" type = "submit" onClick = "switchTo('home')" >Get Started</button>
         </div>
 
-        <!--map screen-->
+        <!--/////////////map screen/////////////////-->
         <div id = "second" class = "form-group form-inline screen" style="text-align:center">
             <!--some code for second screen --> 
             <h1>Map</h1>
@@ -114,28 +169,27 @@
             <div id = "map"></div>
         </div>
         
-        <!--settings screen-->
-        <div id="third" class="screen" style="text-align:center">
-          <div class="mdc-form-field">
-            <div class="mdc-checkbox">
-              <input type="checkbox"
-                     id="my-checkbox"
-                     class="mdc-checkbox__native-control"/>
-              <div class="mdc-checkbox__background">
-                <svg class="mdc-checkbox__checkmark"
-                     viewBox="0 0 24 24">
-                  <path class="mdc-checkbox__checkmark-path"
-                        fill="none"
-                        stroke="white"
-                        d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
-                </svg>
-                <div class="mdc-checkbox__mixedmark"></div>
-              </div>
-            </div>
+        <!--////////////////settings screen/////////////-->
+        <div id="third" class="form-group form-inline screen" style="text-align:center">
           
-            <label for="my-checkbox">My Checkbox Label</label>
-          </div>
-        </div>
+          <h3>Switch to dark mode </h3>
+          <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider round"></span>
+          </label> <!--End of dark mode label-->
+          
+          <br>
+          
+          <!--Change the voices here-->
+          <select id ="voice" class="form-group form-inline" placeholder="voice" name="voice" multiple>
+            <option value = "voice1">voice 1</option>
+            <option value = "voice2">voice 2</option>
+            <option value = "voice3">voice 3</option>
+          </select><!--End of change voices selector-->
+          
+          <!--Possibly set the audio on or off-->
+        
+        </div><!--End of settings screen div -->
         
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
