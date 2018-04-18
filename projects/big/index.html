@@ -18,8 +18,7 @@
         <style>
             .screen {
               display: none;
-              min-height: 999px;
-
+              min-height: 800px;
               padding: 15px;
             }
             
@@ -140,6 +139,12 @@
             .slider.round:before {
               border-radius: 50%;
             }
+            .boxes {
+              text-align: center;
+            }
+            .boxes > input {
+              text-align: left;
+            }
         </style>
         
     </head><!--End of head-->
@@ -173,13 +178,14 @@
         
         <!--////////////////settings screen/////////////-->
         <div id="third" class="form-group form-inline screen" style="text-align:center">
-          
-          <!--Dark Theme checkbox-->
-          <h3>Switch to dark mode </h3>
-          <label class="switch">
-            <input type="checkbox" checked onclick="dark()">
-            <span class="slider round"></span>
-          </label> <!--End of dark mode label-->
+          <div class = "boxes">
+            <!--Dark Theme checkbox-->
+            <h3>Switch to dark mode </h3>
+            <label class="switch">
+              <input type="checkbox" checked onclick="dark()">
+              <span class="slider round"></span>
+            </label> <!--End of dark mode label-->
+          </div>
           
           <script>//Script for dark Theme
             function dark() {
@@ -193,13 +199,14 @@
             }//End of dark function
           </script><!--End of dark theme script-->
           
+          
           <br>
           
           <!--Change the voices here-->
-        	<div class="option">
+        	<!--<div class="option">
         		<label for="voice">Voice</label>
         		<select name="voice" id="voice"></select>
-        	</div>
+        	</div>-->
           
           <!--Possibly set the audio on or off-->
         
