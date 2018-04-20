@@ -160,7 +160,7 @@
             
             
             $("#resultList li").not("#template").remove();
-            $.each(response , function(k,v) {
+            $.each(response.near_earth_objects , function(k,v) {
               console.log(response);
               console.log(k);
               console.log(v);
@@ -169,7 +169,7 @@
                 console.log(v2);
                 clone = $("#template").clone().removeClass("hidden");
                 //clone.find(".mdc-list-item__text").text("Asteroid Name: " + TODO: display name + " Date recorded: " + TODO: display date);
-                clone.find(".mdc-list-item__text").text("Asteroid Name: " + v2 + " Date recorded: " + v2);
+                clone.find(".mdc-list-item__text").text("Asteroid Name: " + v2.name + " Date recorded: " + k);
 
                 //secondary text
                 secondaryText = $("<span>").addClass("mdc-list-item__secondary-text");
