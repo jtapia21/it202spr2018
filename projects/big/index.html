@@ -29,11 +29,11 @@
         <!-- add manifest here -->
         <link rel="manifest" href="/manifest.json">
 
-        <title>Chicago Crime Locator</title>
+        <title>Chicago Crime Locator</title> 
         <style>
             .screen {
               display: none;
-              min-height: 800px;
+              min-height: 750px;
               padding: 15px;
             }
             
@@ -58,7 +58,7 @@
             }
             
             #map {
-              height: 800px;
+              height: 700px;
             }
             
             nav {
@@ -179,9 +179,8 @@
             <p>This will help you decide whether to go to your destination or stay away from certain neiborhoods. Drive Safe!</p>
             <h3>Search for your destination.</h3>
             <input type = "text" placeholder = "Enter Location" id = "userInput"/>
-            <button class="mdc-button mdc-button--raised mdc-ripple-upgraded" style="--mdc-ripple-fg-size:60.2297px; 
-            --mdc-ripple-fg-scale:1.93663; --mdc-ripple-fg-translate-start:24.8852px, -7.41172px; 
-            --mdc-ripple-fg-translate-end:20.0766px, -12.1148px;" 
+            <button class="mdc-button mdc-button--raised mdc-ripple-upgraded" 
+            style="--mdc-ripple-fg-size:60.2297px; --mdc-ripple-fg-scale:1.93663; --mdc-ripple-fg-translate-start:24.8852px, -7.41172px; --mdc-ripple-fg-translate-end:20.0766px, -12.1148px;" 
             id = "btnSearch" type = "submit" onClick = "switchTo('home')">
               Search
             </button>
@@ -191,10 +190,25 @@
         <div id = "second" class = "form-group form-inline screen" style="text-align:center">
             <!--some code for second screen --> 
             <h1>Map</h1>
-            <button onclick="toggleHeatmap()" style = "float: left;">Toggle Heatmap</button>
-            <button onclick="changeGradient()" >Change gradient</button>
-            <button onclick="changeRadius()" >Change radius</button>
-            <button onclick="changeOpacity()" style = "float: right;">Change opacity</button>
+            
+            <button class="mdc-button mdc-button--raised secondary-filled-button mdc-ripple-upgraded" 
+            style="--mdc-ripple-fg-size:70.4484px; --mdc-ripple-fg-scale:1.8852; --mdc-ripple-fg-translate-start:32.5961px, -26.5211px; --mdc-ripple-fg-translate-end:23.4828px, -17.2242px; float: left;"
+            onclick="toggleHeatmap()">
+              Toggle Heatmap
+            </button>
+            
+            <button class="mdc-button mdc-button--raised secondary-filled-button mdc-ripple-upgraded" 
+            style="--mdc-ripple-fg-size:70.4484px; --mdc-ripple-fg-scale:1.8852; --mdc-ripple-fg-translate-start:32.5961px, -26.5211px; --mdc-ripple-fg-translate-end:23.4828px, -17.2242px;"
+            onclick="changeGradient()">
+              Change gradient
+            </button>
+            
+            <button class="mdc-button mdc-button--raised secondary-filled-button mdc-ripple-upgraded" 
+            style="--mdc-ripple-fg-size:70.4484px; --mdc-ripple-fg-scale:1.8852; --mdc-ripple-fg-translate-start:32.5961px, -26.5211px; --mdc-ripple-fg-translate-end:23.4828px, -17.2242px;"
+            onclick="changeRadius()">
+              Change radius
+            </button>
+            
             <div id = "map"></div>
         </div>
         
