@@ -7,14 +7,29 @@
           data visualization (checked)
           data store and retrive from indexedDB (in progress)
           app intereactions (checked)
-          shell assets for the server workers to cache
+          shell assets for the server workers to cache(checked)
         -->
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+        
+        <!-- the MCW stylesheet-->
+        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    
+        <!-- the material icon font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        
+        <!-- material script-->
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.js"></script>
+        
+        <!-- Include Dexie -->
+        <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+        
+        <!-- add manifest here -->
+        <link rel="manifest" href="/manifest.json">
 
-        <title>Big Project</title>
+        <title>Chicago Crime Locator</title>
         <style>
             .screen {
               display: none;
@@ -160,9 +175,16 @@
         <!--/////////////////Search screen///////////////-->
         <div id="home" class="screen" style="text-align:center">
             <h1>Welcome!</h1>
-            <h3>Search for your location.</h3>
+            <p>The Chicago crime locator helps you see around the destination you chose.</p>
+            <p>This will help you decide whether to go to your destination or stay away from certain neiborhoods. Drive Safe!</p>
+            <h3>Search for your destination.</h3>
             <input type = "text" placeholder = "Enter Location" id = "userInput"/>
-            <button id = "btnSearch" class = "btn btn-primary" type = "submit" onClick = "switchTo('home')" >Get Started</button>
+            <button class="mdc-button mdc-button--raised mdc-ripple-upgraded" style="--mdc-ripple-fg-size:60.2297px; 
+            --mdc-ripple-fg-scale:1.93663; --mdc-ripple-fg-translate-start:24.8852px, -7.41172px; 
+            --mdc-ripple-fg-translate-end:20.0766px, -12.1148px;" 
+            id = "btnSearch" type = "submit" onClick = "switchTo('home')">
+              Search
+            </button>
         </div>
 
         <!--/////////////map screen/////////////////-->
@@ -178,13 +200,17 @@
         
         <!--////////////////settings screen/////////////-->
         <div id="third" class="form-group form-inline screen" style="text-align:center">
-          <div class = "boxes">
-            <!--Dark Theme checkbox-->
-            <h3>Switch to dark mode </h3>
-            <label class="switch">
-              <input type="checkbox" checked onclick="dark()">
-              <span class="slider round"></span>
-            </label> <!--End of dark mode label-->
+          
+          <!--Dark mode-->
+          <h5>Dark Mode</h5>
+          <div class="demo-switch-wrapper">
+            <div class="mdc-switch">
+              <input type="checkbox" checked onchange = "dark()" id="basic-switch2" class="mdc-switch__native-control"/>
+              <div class="mdc-switch__background">
+                <div class="mdc-switch__knob"></div>
+              </div>
+            </div>
+            <label for="basic-switch" class="mdc-switch-label">off/on</label>
           </div>
           
           <script>//Script for dark Theme
@@ -199,16 +225,28 @@
             }//End of dark function
           </script><!--End of dark theme script-->
           
+          <br>
+          
+          <!--Set the audio on or off-->
+          <h5>Voice settings</h5>
+          <div class="demo-switch-wrapper">
+            <div class="mdc-switch">
+              <input type="checkbox" id="basic-switch" class="mdc-switch__native-control" onchange = "doalert(this)"/>
+              <div class="mdc-switch__background">
+                <div class="mdc-switch__knob"></div>
+              </div>
+            </div>
+            <label for="basic-switch" class="mdc-switch-label">off/on</label>
+          </div>
           
           <br>
           
+          <h5>Voice selection</h5>
           <!--Change the voices here-->
-        	<!--<div class="option">
+        	<div class="voice">
         		<label for="voice">Voice</label>
         		<select name="voice" id="voice"></select>
-        	</div>-->
-          
-          <!--Possibly set the audio on or off-->
+        	</div>
         
         </div><!--End of settings screen div -->
         
@@ -250,6 +288,16 @@
         </script><!--Ennd of switching screens script-->
         
         <script> // Script for data api's
+          //error message for geo location
+          var x = document.getElementById("errorMess");
+              
+          function getLocation() {
+              if (navigator.geolocation) {
+                  navigator.geolocation.getCurrentPosition(initialize, showError);
+              } else {
+                  x.innerHTML = "Geolocation is not supported by this browser.";
+              }
+          }
         
           var map;
           var heatmap;
@@ -273,9 +321,6 @@
             // an HTML text input box.
             var autocomplete = new google.maps.places.Autocomplete(input);
             autocomplete.bindTo('bounds', map);
-          
-            //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-            //map.controls[google.maps.ControlPosition.userInput].push(input);
           
             var infowindow = new google.maps.InfoWindow();
             var marker = new google.maps.Marker({
@@ -361,111 +406,149 @@
             function changeOpacity() {
               heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
             }
+            
+            
+            //show error messages for non-map support
+            function showError(error) {
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        x.innerHTML = "User denied the request for Geolocation."
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        x.innerHTML = "Location information is unavailable."
+                        break;
+                    case error.TIMEOUT:
+                        x.innerHTML = "The request to get user location timed out."
+                        break;
+                    case error.UNKNOWN_ERROR:
+                        x.innerHTML = "An unknown error occurred."
+                        break;
+                }
+            }
+            
+            //reset
+            function showAlert() {
+                if (window.confirm("You are about to reset the app to its default settings. Is this ok?")) { 
+                  
+                }
+            }
         </script><!--End of data api's script-->
         
         <script>// Script to add voice api to the userInput
-          //Set variables for voice 
-          var supportMsg = document.getElementById('msg');
-          var speechMsgInput = document.getElementById('userInput');
-          var button = document.getElementById('btnSearch')
+        
+          var voiceSelect = document.getElementById('voice');
           
-          //create a new utter for user input and add it to the queue
-          function speak(text) {
-            //create a new speechSunthesisUtterance
-            var msg = new SpeechSynthesisUtterance();
+          function printVoiceSelect(){
             
-            //set the text
-            msg.text = text;
+            //Get the list of voices that are available
+            var voices = speechSynthesis.getVoices();
             
-            //queue this utter
-            window.speechSynthesis.speak(msg);
-          }//End of speak function 
+            voices.forEach(function(voice, i) {
+              var option = document.createElement('option');
+              
+              option.value = voice.name;
+              option.innerHTML = voice.name;
+              
+              voiceSelect.appendChild(option);
+            });//End voices.forEach 
+            
+          }//End of printVoiceSelect
           
-          // Set up an event listener for when the 'speak' button is clicked.
-          button.addEventListener('click', function(e) {
-            if (speechMsgInput.value.length > 0) {
-            	speak(speechMsgInput.value);
+          printVoiceSelect();
+          
+          window.speechSynthesis.onvoiceschanged = function(e) {
+            printVoiceSelect();
+          }
+          
+          //checks user option if voice on/off
+          function doalert(checkboxElem) {
+            
+            if (checkboxElem.checked) {
+              
+              alert ("Turning on voice setting");
+              
+              //Set variables for voice 
+              var supportMsg = document.getElementById('msg');
+              var speechMsgInput = document.getElementById('userInput');
+              var button = document.getElementById('btnSearch')
+              
+              //create a new utter for user input and add it to the queue
+              function speak(text) {
+                //create a new speechSunthesisUtterance
+                var msg = new SpeechSynthesisUtterance();
+                
+                //set the text
+                msg.text = text;
+                
+                // If a voice has been selected, find the voice and set the
+                // utterance instance's voice attribute.
+              	if (voiceSelect.value) {
+              		msg.voice = speechSynthesis.getVoices().filter(function(voice) { 
+              		  return voice.name == voiceSelect.value; })[0];
+              	}
+                
+                //queue this utter
+                window.speechSynthesis.speak(msg);
+              }//End of speak function 
+              
+              // Set up an event listener for when the 'speak' button is clicked.
+              button.addEventListener('click', function(e) {
+                if (speechMsgInput.value.length > 0) {
+                	speak(speechMsgInput.value);
+                }//End of if statement
+              });//End of button event listener
+              
             }//End of if statement
-          });//End of button event listener
+            else {
+              alert ("Turning off voice setting");
+            }//End of else statement
+          }//End of doalert function
+          
         </script><!--End of voice api script-->
         
         <script>//indexDB script
-          //////TODO save user's last searched input and save user settings/////
-          // var existingSettings = [];
+          // This works on all devices/browsers, and uses IndexedDBShim as a final fallback 
+          var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
           
-          // db.open().then(function() {
-          //   console.log("db.open");
-          //   return db.settings.each(setting => {
-          //       existingSettings.push(setting.name);
-          //   });
-
-          // }).then (function() {
-          //   console.log("ensure settings exist");
-          //     console.log("existing settings", existingSettings);
-          //     // make sure all settings are in db before updating UI
-          //     var settingName="",defaultValue = "";
-              
-          //     for (var i=0; i<appSettings.length; i++) {
-          //         settingName = appSettings[i].name;
-          //         // if doesn't exist, add
-          //         console.log(existingSettings.indexOf(settingName));
-          //         if (existingSettings.indexOf(settingName) < 0) {
-          //           // // set default value
-          //           // if (appSettings[i].type == "boolean") {
-          //           //     defaultValue = false;
-          //           // } else {
-          //           //     defaultValue = "";
-          //           // }
-          //           console.log(settingName, defaultValue);
-          //           db.settings.add({"name": settingName,"value":defaultValue});
-          //         }
-    
-          //     }
-              
-              
-          // }).then(function() {
-          //   console.log("loop and update UI");
-          //       var element;
-          //     db.settings.each(setting => {
-          //       element = $("<input>").addClass("settingValue");
-          //       if ([true,false].indexOf(setting.value) >= 0) {
-          //           element.attr("type","checkbox");
-          //           element.attr("id", setting.name);
-          //           if (setting.value == true) {
-          //               element.prop( "checked", true );
-          //           }
-                    
-          //       } else {
-          //           element.attr("type","texdt");
-          //           element.attr("id", setting.name);
-          //           element.val(setting.value);
-          //       }
-          //       $("body").append(setting.name," ",element,"<br>");
-          //   });
-              
-              
-          //   }).catch(function(error) {
-
-          //   console.log ("Ooops: " + error);
-          //   alert ("Ooops: " + error);
-          // });  
+          // Open (or create) the database
+          var open = indexedDB.open("MyDatabase", 1);
           
+          open.onupgradeneeded = function() {
+              var db = open.result;
+              var store = db.createObjectStore("MyObjectStore", {keyPath: "id"});
+              var index = store.createIndex("MySettings", ["setting.value"]);
+          };
           
+          open.onsuccess = function() {
+              // Start a new transaction
+              db = open.result;
+              var tx = db.transaction("MyObjectStore", "readwrite");
+              var store = tx.objectStore("MyObjectStore");
+              var index = store.index("MySettings");
           
-          // $("body").on("change", ".settingValue", function() {
-          //   var newValue;
-          //   if ($(this).attr("type") == "checkbox") {
-          //       newValue = $(this).prop("checked");
-          //   } else {
-          //       newValue = $(this).val();
-          //   }
-             
-          //   db.settings.put({"name": $(this).attr("id"), "value": newValue});
-          //   console.log("value updated");
-          // });
+              // Add some data
+              store.put({id: 1, setting: {value: "on"}});
+              store.put({id: 2, setting: {value: "on",}});
+              
+              // Query the data
+              var getsetting1 = store.get(1);
+              var getsetting2 = store.get(2);
+              
+              // Close the db when the transaction is done
+              tx.oncomplete = function() {
+                  db.close();
+              };
+          }
         </script><!--End of indexDB script-->
         
         <script> //serverWorkers script
+          
+          if ('serviceWorker' in navigator) {
+            //console.log(navigator);
+          navigator.serviceWorker
+                   .register('./service-worker.js')
+                   .then(function() { console.log('Service Worker Registered'); });
+          }//End of if statement
         </script><!--End of serverWOrkers script-->
         
         <script
