@@ -2,7 +2,7 @@
 <html>
     <head>
         <!--
-          material componets
+          material componets (Checked)
           two sets of data api (checked)
           data visualization (checked)
           data store and retrive from indexedDB (in progress)
@@ -58,7 +58,7 @@
             }
             
             #map {
-              height: 800px;
+              height: 600px;
             }
             
             nav {
@@ -66,7 +66,7 @@
                 margin: 0;
                 padding: 0;
                 overflow: hidden;
-                background-color: #333;
+                background-color: #7F00FF;
             }
             
             li {
@@ -168,7 +168,7 @@
         <!--////////////navigation bar/////////////////-->
         <nav>
             <li><a class="active" href="#home">Search</a></li>
-            <li><a href="#second">Destination</a></li>
+            <li><a href="#second">Map</a></li>
             <li><a href="#third">Settings</a></li>
         </nav>
 
@@ -370,7 +370,6 @@
               infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
                   place.formatted_address + '</div>');
                   infowindow.open(map, marker);
-                  });
                   
                   //console.log(marker);
                   $.each(response, function(i,v) {
@@ -385,9 +384,33 @@
                       data: arrayPoints,
                       map: map
                     });
+                  
+                  });
+                  
+                  // //console.log(marker);
+                  // $.each(response, function(i,v) {
+                  //   //console.log(v);
+                  //   if (v.hasOwnProperty("latitude") && v.hasOwnProperty("longitude")) {
+                    
+                  //     arrayPoints.push(new google.maps.LatLng(parseFloat(v.latitude), parseFloat(v.longitude)))
+                  //   }
+                  // })
+                  
+                  // heatmap = new google.maps.visualization.HeatmapLayer({
+                  //     data: arrayPoints,
+                  //     map: map
+                  //   });
               
               })
           }
+          
+          
+          ///////add a method that the crime heat map is not showing 24/7
+              // button.addEventListener('click', function(e) {
+              //   if (speechMsgInput.value.length > 0) {
+              //   	speak(speechMsgInput.value);
+              //   }//End of if statement
+              // });//End of button event listener
           
             function toggleHeatmap() {
               heatmap.setMap(heatmap.getMap() ? null : map);
