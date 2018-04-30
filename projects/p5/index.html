@@ -13,15 +13,23 @@
         <button id="capture">Capture</button>
         <canvas id="canvas" width=320 height=240></canvas>
         <div id="imageData" ></div>
-
+        
+        <button id = "capFace">capFace</button>
+        <canvas id = "canvas2" width = 320 height = 240></canvas>
+        
         <script>
           const player = document.getElementById('player');
           const canvas = document.getElementById('canvas');
-          //const canvas2 = document.getElementById('canvas2');
           const context = canvas.getContext('2d');
-          //const otherCon = canvas2.getContext('2d');
           const captureButton = document.getElementById('capture');
           const dataDiv = document.getElementById('imageData');
+          
+          
+          const canvas2 = document.getElementById('canvas2');
+          const otherCon = canvas2.getContext('2d');
+          const faceButton = document.getElementById('capFace');
+          
+          
           var doFaceCapture = false;
           var visionApiEndpoint = "https://vision.googleapis.com/v1/images:annotate?key=";
           var nextX = 0, nextY = 0;
@@ -34,13 +42,18 @@
             // Draw the video frame to the canvas.
             doFaceCapture = true;
             context.drawImage(player, 0, 0, canvas.width, canvas.height);
-            getImageData('FACE_DETECTION');
+            //getImageData('FACE_DETECTION');
+            $('#capFace').show();
           });
         
           // Attach the video stream to the video element and autoplay.
           navigator.mediaDevices.getUserMedia(constraints)
             .then((stream) => {
               player.srcObject = stream;
+            });
+            
+            faceButton.addEventListener('click', () =>{
+              getImageData('FACE_DETECTION');
             });
             
             function getImageData(type) {
@@ -53,8 +66,8 @@
                           },
                           "features":[
                             {
-                              "type": type,
-                              "maxResults": 1
+                              "type": 'FACE_DETECTION',
+                              "maxResults": 10
                             }
                           ]
                         }
@@ -84,12 +97,15 @@
                     var sourceX = topLeft.x;
                     var sourceY = topLeft.y;
                     
-                    context.drawImage(canvas, sourceX, sourceY, faceWidth, faceHeight, nextX, nextY, faceWidth, faceHeight);
+                    otherCon.drawImage(canvas, sourceX, sourceY, faceWidth, faceHeight, nextX, nextY, faceWidth, faceHeight);
                     
                     nextX += faceWidth;
                   
-                    if (doFaceCapture) {
-                      getImageData('FACE_DETECTION');
+                    // if (doFaceCapture) {
+                    //   getImageData('FACE_DETECTION');
+                    // }
+                    if(nextX >= 700){
+                      nextX = 0;
                     }
                     
                 });
