@@ -1,0 +1,137 @@
+
+<!doctype html>
+<html lang="en">
+    
+    <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    
+    <title>Project 5</title>
+    
+    <style></style>
+    
+    </head>
+  
+    <body>
+        
+        <video id="player" controls autoplay></video>
+        <button id="capture">Capture</button>
+        <canvas id="canvas" width=320 height=240></canvas>
+        
+        <button id="copy" style="display:none;">Copy</button>
+        <canvas id="copyCanvas" width=800 height=480></canvas>
+        
+    <script>
+    
+        var visionApiEndpoint =  "https://vision.googleapis.com/v1/images:annotate?key=";
+        
+        const player = document.getElementById('player');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const captureButton = document.getElementById('capture');
+        
+        
+        const copyButton = document.getElementById('copy');
+        const copyCanvas = document.getElementById('copyCanvas');
+        const destCtx = copyCanvas.getContext('2d');
+        var xStart = 0;
+        var yStart = 0;
+        var noFace = true;
+        
+        const constraints = {
+            video: true,
+        };
+    
+        captureButton.addEventListener('click', () => {
+            // Draw the video frame to the canvas.
+            context.drawImage(player, 0, 0, canvas.width, canvas.height);
+            //show copy button when capture button is pressed
+            $("#copy").show(); 
+        });
+        
+        // Attach the video stream to the video element and autoplay.
+        navigator.mediaDevices.getUserMedia(constraints)
+        .then((stream) => {
+            player.srcObject = stream;
+        });
+        
+        copyButton.addEventListener('click', () => {
+            
+            getImageData('FACE_DETECTION');
+            
+        });
+    
+        function getImageData() {
+            requestBody = {
+                
+            "requests":[
+            {
+            "image":{
+            "content": canvas.toDataURL().split(",")[1]
+            },
+            "features":[
+            {
+              "type":"FACE_DETECTION",
+              "maxResults":10
+            }
+            ]
+            }
+            ]
+        
+            } 
+            
+            $.ajax({
+                
+                method: "POST",
+                contentType: "application/json",
+                url: visionApiEndpoint + "AIzaSyAx9rxfpIjJEQ75l2CeLbtWA68HNPSr8YY",
+                data: JSON.stringify(requestBody)
+            })
+            .done(function(response) {
+                console.log(response);
+                $("#imageData").html("<pre>" + JSON.stringify(response) + "</pre>")
+                
+                var faceVertices = response.responses[0].faceAnnotations[0].boundingPoly.vertices;
+                console.log(faceVertices);
+                
+                
+                // find corners
+                var topLeft = faceVertices[0];
+                var bottomRight = faceVertices[2];
+                console.log(bottomRight, bottomRight.x, topLeft, topLeft.x);
+                
+                // determine width and height for cropping
+                var faceWidth = bottomRight.x - topLeft.x;
+                var faceHeight = bottomRight.y - topLeft.y;
+                var sourceX = topLeft.x;
+                var sourceY = topLeft.y;
+                
+
+                destCtx.drawImage(canvas, sourceX, sourceY, faceWidth, faceHeight, xStart, yStart, faceWidth, faceHeight);
+                
+                xStart = xStart + faceWidth;
+                
+                if(xStart >= 700) {
+                    
+                    xStart = 0;
+                }
+                
+            });
+        }
+    </script>
+        
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    
+    <!--https://console.developers.google.com/billing/enable?project=my-project-1517864498452-->
+        
+    </body>
+</html>
