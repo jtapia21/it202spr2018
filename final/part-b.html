@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <style>
+            #map {
+                height: 400px;
+                width: 100%;
+            }
+        </style>
+        <title>Final</title>
+    </head>
+    <body>
+        
+        <div id="map"></div>
+        <div id = "map" class = "form-group form-inline screen" style="text-align:center">
+          <!--Drop down menu-->
+          <select id ="clinicType" class="form-control" placeholder="Clinic Type" name="Clinic Type" multiple>
+                  <option value = "'STI Specialty Clinic'">STI Specialty Clinic</option>
+                  <option value = "'Mental Health Clinic'">Mental Health Clinic</option>
+                  <option value = "'WIC Clinic'">WIC Clinic</option>
+          </select>
+          <input id = "btnSearch" class = "btn btn-primary" type = "submit"> <br>
+          <div id = "sResults"></div>
+        </div>
+        
+        
+        <script>//// start google map here
+        
+            var url = "https://data.cityofchicago.org/resource/t57k-za2y.json$SELECT=distinct clinic_type";
+            function initMap() {
+                $("#btnSearch").on("click", function() {
+                   $.get(url.replace("clinic_type", $("clinicType").val())
+                   )
+                       .done(function(response) {
+                            //centers map on chicago & creates it
+                            var myLatLng = {lat: 41.8781, lng: -87.6298};
+                            var map = new google.maps.Map(document.getElementById('map'), {
+                                zoom: 10,
+                                center: myLatLng,
+                        });
+                   });
+                });
+                
+                var contentString;
+                
+                //creates an info window
+                var infowindow = new google.maps.InfoWindow({
+                    content: contentString
+                }); 
+                
+                var marker = new google.maps.Marker({
+                    position: {lat:parseFloat( response[i].console.log(i)), lng: parseFloat(response[i].console.log(i))},
+                    map: map,
+                    label: labels[labelIndex] 
+                });
+                        
+                marker.addListener('mouseover', function() {
+                    infowindow.open(map, this);
+                });
+                        
+                // assuming you also want to hide the infowindow when user mouses-out
+                marker.addListener('mouseout', function() {
+                    infowindow.close();
+                });
+                
+                // $.ajax({
+                //     url: "https://data.cityofchicago.org/resource/t57k-za2y.json$where=clinic_type (<clinic type goes here>)",
+                //     type: "GET",
+                //     data: {
+                //         "$limit" : 311,
+                //     }
+                // })
+            }
+        </script>
+        
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAx9rxfpIjJEQ75l2CeLbtWA68HNPSr8YY&callback=initMap">
+        </script>
+    
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    </body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+        <title>final part-c</title>
+    </head>
+    <body>
+    <h1>Option 2</h1>
+        <div>
+            <input type = "text" placeholder = "Enter Location" id = "userInput"/>
+            <input id = "btnSearch" class = "btn btn-primary" type = "submit"> <br>
+        </div>
+        	<div class="voice">
+        		<label for="voice">Voice</label>
+        		<select name="voice" id="voice"></select>
+        	</div>
+    
+        <script>// Script to add voice api to the userInput
+        
+         var input = (document.getElementById('userInput'));
+         
+          var voiceSelect = document.getElementById('voice');
+          
+          function printVoiceSelect(){
+            
+            //Get the list of voices that are available
+            var voices = speechSynthesis.getVoices();
+            
+            voices.forEach(function(voice, i) {
+              var option = document.createElement('option');
+              
+              option.value = voice.name;
+              option.innerHTML = voice.name;
+              
+              voiceSelect.appendChild(option);
+            });//End voices.forEach 
+            
+          }//End of printVoiceSelect
+          
+          printVoiceSelect();
+          
+          window.speechSynthesis.onvoiceschanged = function(e) {
+            printVoiceSelect();
+          }
+          
+          //checks user option if voice on/off
+          function doalert(checkboxElem) {
+            
+            if (checkboxElem.checked) {
+              
+              alert ("Turning on voice setting");
+              
+              //Set variables for voice 
+              var supportMsg = document.getElementById('msg');
+              var speechMsgInput = document.getElementById('userInput');
+              var button = document.getElementById('btnSearch')
+              
+              //create a new utter for user input and add it to the queue
+              function speak(text) {
+                //create a new speechSunthesisUtterance
+                var msg = new SpeechSynthesisUtterance();
+                
+                //set the text
+                msg.text = text;
+                
+                // If a voice has been selected, find the voice and set the
+                // utterance instance's voice attribute.
+              	if (voiceSelect.value) {
+              		msg.voice = speechSynthesis.getVoices().filter(function(voice) { 
+              		  return voice.name == voiceSelect.value; })[0];
+              	}
+                
+                //queue this utter
+                window.speechSynthesis.speak(msg);
+              }//End of speak function 
+              
+              // Set up an event listener for when the 'speak' button is clicked.
+              button.addEventListener('click', function(e) {
+                if (speechMsgInput.value.length > 0) {
+                	speak(speechMsgInput.value);
+                }//End of if statement
+              });//End of button event listener
+              
+            }//End of if statement
+            else {
+              alert ("Turning off voice setting");
+            }//End of else statement
+          }//End of doalert function
+          
+        </script><!--End of voice api script-->
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    </body>
+</html>

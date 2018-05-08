@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta charset="utf-8">
+    
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        
+        <!-- the MCW stylesheet-->
+        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    
+        <!-- the material icon font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        
+        <!-- material script-->
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.js"></script>
+        
+        
+        <style>
+            #map {
+                height: 400px;
+                width: 100%;
+            }
+        </style>
+        
+        <title></title>
+        
+    </head>
+    
+    <body>
+        
+        <div id="results"></div>
+        
+        <div id="map"></div>
+        
+        <script>
+            
+            function initMap() {
+                $.ajax({
+                    url: "https://data.cityofchicago.org/resource/787j-mys9.json?$where=zip IN (60607)",
+                    type: "GET",
+                    data: {
+                        "$limit" : 311,
+                }
+                }).done(function(data) {
+                    
+                    console.log(data);
+                    $("#results").text("");
+                    
+                    var myLatLng = {lat: 41.8781, lng: -87.6298};
+                    var map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 12,
+                        center: myLatLng,
+                    });
+                    
+                    $.each(data, function(i,v) {
+                        
+                        console.log(v);
+                        
+                        var contentString = '<div id="content" style="color:Black;">'+
+                                                '<div id="siteNotice">'+
+                                                '</div>'+
+                                                '<h1 id="firstHeading" class="firstHeading">' +
+                                                v.street_address + '</h1>' +
+                                                '</div>';
+                                                '</div>';
+                            
+                        //creates an info window
+                        var infowindow = new google.maps.InfoWindow({
+                            content: contentString
+                        });
+                        
+                        var marker = new google.maps.Marker({
+                            position: {lat:parseFloat( data[i].latitude), lng: parseFloat(data[i].longitude)},
+                            map: map
+                        });
+                        
+                        marker.addListener('mouseover', function() {
+                        infowindow.open(map, this);
+                        });
+                        
+                        // assuming you also want to hide the infowindow when user mouses-out
+                        marker.addListener('mouseout', function() {
+                        infowindow.close();
+                        });
+                    });
+                
+                });
+            }
+            
+        </script>
+        
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAx9rxfpIjJEQ75l2CeLbtWA68HNPSr8YY&callback=initMap">
+        </script>
+    
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+    </body>
+</html> 
